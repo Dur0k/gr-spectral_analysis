@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<block>
+  <name>peak_finding_cf</name>
+  <key>spectral_analysis_peak_finding_cf</key>
+  <category>[spectral_analysis]</category>
+  <import>import spectral_analysis</import>
+  <make>spectral_analysis.peak_finding_cf($fft_size, $sensor_count, $thres, $min_dist)</make>
+  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
+       Sub-nodes:
+       * name
+       * key (makes the value accessible as $keyname, e.g. in the make node)
+       * type -->
+  <param>
+    <name>FFT Size</name>
+    <key>fft_size</key>
+    <value>1</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>Sensor Count</name>
+    <key>sensor_count</key>
+    <value>1</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>Peak Threshold</name>
+    <key>thres</key>
+    <type>float</type>
+  </param>
+  <param>
+    <name>Peak Distance</name>
+    <key>min_dist</key>
+    <type>float</type>
+  </param>
+  
+
+  <!-- Make one 'sink' node per input. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <sink>
+    <name>in0</name>
+    <type>float</type>
+    <vlen>$fft_size</vlen>
+  </sink>
+  <sink>
+    <name>in1</name>
+    <type>complex</type>
+    <vlen>$fft_size</vlen>
+  </sink>
+
+  <!-- Make one 'source' node per output. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <source>
+    <name>out</name>
+    <type>float</type>
+    <vlen>$sensor_count</vlen>
+  </source>
+</block>

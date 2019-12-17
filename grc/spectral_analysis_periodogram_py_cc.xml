@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<block>
+  <name>periodogram_py_cc</name>
+  <key>spectral_analysis_periodogram_py_cc</key>
+  <category>[spectral_analysis]</category>
+  <import>import spectral_analysis</import>
+  <make>spectral_analysis.periodogram_py_cc($sample_rate, $fft_size, $window)</make>
+  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
+       Sub-nodes:
+       * name
+       * key (makes the value accessible as $keyname, e.g. in the make node)
+       * type -->
+  <param>
+    <name>Sample Rate</name>
+    <key>sample_rate</key>
+    <type>float</type>
+  </param>
+  <param>
+    <name>FFT Size</name>
+    <key>fft_size</key>
+    <value>1</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>Window(scipy)</name>
+    <key>window</key>
+    <type>string</type>
+  </param>
+
+  <!-- Make one 'sink' node per input. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+    <vlen>$fft_size</vlen>
+  </sink>
+
+  <!-- Make one 'source' node per output. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <source>
+    <name>out0</name>
+    <type>float</type>
+    <vlen>$fft_size</vlen>
+  </source>
+  <source>
+    <name>out1</name>
+    <type>complex</type>
+    <vlen>$fft_size</vlen>
+  </source>
+</block>
