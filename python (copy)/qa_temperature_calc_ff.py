@@ -1,37 +1,37 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-#
-# Copyright 2020 gr-spectral_analysis author.
-#
+# 
+# Copyright 2019 gr-spectral_analysis author.
+# 
 # This is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3, or (at your option)
 # any later version.
-#
+# 
 # This software is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-#
+# 
 # You should have received a copy of the GNU General Public License
 # along with this software; see the file COPYING.  If not, write to
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
-#
+# 
 import numpy
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
 from temperature_calc_ff import temperature_calc_ff
 
-class qa_temperature_calc_ff(gr_unittest.TestCase):
+class qa_temperature_calc_ff (gr_unittest.TestCase):
 
-    def setUp(self):
-        self.tb = gr.top_block()
+    def setUp (self):
+        self.tb = gr.top_block ()
 
-    def tearDown(self):
+    def tearDown (self):
         self.tb = None
 
-    def test_001_t(self):
+    def test_001_t (self):
         # set up fg
         sensor_count = 1
         polycoeff = [[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08]]#,[3.75334018e-02, -2.24642587e+00, -3.69621493e+01, 1.20001284e+08],[1.41016716e-02, -1.21260981e+00, -4.59088135e+01, 1.20001834e+08]]
@@ -55,4 +55,4 @@ class qa_temperature_calc_ff(gr_unittest.TestCase):
 
 
 if __name__ == '__main__':
-    gr_unittest.run(qa_temperature_calc_ff)
+    gr_unittest.run(qa_temperature_calc_ff, "qa_temperature_calc_ff.xml")

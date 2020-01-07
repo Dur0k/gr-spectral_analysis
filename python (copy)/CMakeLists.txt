@@ -18,46 +18,32 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-if(DEFINED __INCLUDED_GR_PLATFORM_CMAKE)
+########################################################################
+# Include python install macros
+########################################################################
+include(GrPython)
+if(NOT PYTHONINTERP_FOUND)
     return()
 endif()
-set(__INCLUDED_GR_PLATFORM_CMAKE TRUE)
 
 ########################################################################
-# Setup additional defines for OS types
+# Install python sources
 ########################################################################
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set(LINUX TRUE)
-endif()
-
-if(NOT CMAKE_CROSSCOMPILING AND LINUX AND EXISTS "/etc/debian_version")
-    set(DEBIAN TRUE)
-endif()
-
-if(NOT CMAKE_CROSSCOMPILING AND LINUX AND EXISTS "/etc/redhat-release")
-    set(REDHAT TRUE)
-endif()
-
-if(NOT CMAKE_CROSSCOMPILING AND LINUX AND EXISTS "/etc/slackware-version")
-    set(SLACKWARE TRUE)
-endif()
+GR_PYTHON_INSTALL(
+    FILES
+    __init__.py
+    periodogram_py_cc.py
+    peak_finding_cf.py
+    temperature_calc_ff.py DESTINATION ${GR_PYTHON_DIR}/spectral_analysis
+)
 
 ########################################################################
-# when the library suffix should be 64 (applies to redhat linux family)
+# Handle the unit tests
 ########################################################################
-if (REDHAT OR SLACKWARE)
-    set(LIB64_CONVENTION TRUE)
-endif()
+include(GrTest)
 
-if(NOT DEFINED LIB_SUFFIX AND LIB64_CONVENTION AND CMAKE_SYSTEM_PROCESSOR MATCHES "64$")
-    set(LIB_SUFFIX 64)
-endif()
-
-########################################################################
-# Detect /lib versus /lib64
-########################################################################
-if (CMAKE_INSTALL_LIBDIR MATCHES lib64)
-    set(LIB_SUFFIX 64)
-endif()
-
-set(LIB_SUFFIX ${LIB_SUFFIX} CACHE STRING "lib directory suffix")
+set(GR_TEST_TARGET_DEPS gnuradio-spectral_analysis)
+set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig)
+GR_ADD_TEST(qa_periodogram_py_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_periodogram_py_cc.py)
+GR_ADD_TEST(qa_peak_finding_cf ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_peak_finding_cf.py)
+GR_ADD_TEST(qa_temperature_calc_ff ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_temperature_calc_ff.py)

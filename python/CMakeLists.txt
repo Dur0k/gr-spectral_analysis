@@ -34,6 +34,9 @@ GR_PYTHON_INSTALL(
     __init__.py
     periodogram_py_cc.py
     peak_finding_cf.py
+    temperature_calc_ff.py
+    peak_finding_cf.py
+    periodogram_py_cc.py
     temperature_calc_ff.py DESTINATION ${GR_PYTHON_DIR}/spectral_analysis
 )
 
@@ -46,4 +49,7 @@ set(GR_TEST_TARGET_DEPS gnuradio-spectral_analysis)
 set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig)
 GR_ADD_TEST(qa_periodogram_py_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_periodogram_py_cc.py)
 GR_ADD_TEST(qa_peak_finding_cf ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_peak_finding_cf.py)
+GR_ADD_TEST(qa_temperature_calc_ff ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_temperature_calc_ff.py)
+GR_ADD_TEST(qa_peak_finding_cf ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_peak_finding_cf.py)
+GR_ADD_TEST(qa_periodogram_py_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_periodogram_py_cc.py)
 GR_ADD_TEST(qa_temperature_calc_ff ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_temperature_calc_ff.py)
