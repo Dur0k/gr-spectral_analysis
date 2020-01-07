@@ -9,7 +9,7 @@ parameters:
     label: Sensor Count
     dtype: int
     default: '1'
-    hide: ${ 'part' if vlen == 1 else 'none' }
+    hide: ${ 'part' if sensor_count == 1 else 'none' }
 -   id: polycoeff
     label: Polynomial coefficients
     dtype: raw
@@ -36,7 +36,5 @@ templates:
     imports: import spectral_analysis
     make: spectral_analysis.temperature_calc_ff(${sensor_count}, ${polycoeff}, ${fshift},
         ${offset})
-    callbacks:
-    - open(${file})
 
 file_format: 1

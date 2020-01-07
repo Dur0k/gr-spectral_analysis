@@ -12,7 +12,7 @@ parameters:
     label: FFT Size
     dtype: int
     default: '1'
-    hide: ${ 'part' if vlen == 1 else 'none' }
+    hide: ${ 'part' if fft_size == 1 else 'none' }
 -   id: window
     label: Window(scipy)
     dtype: string

@@ -9,12 +9,11 @@ parameters:
     label: FFT Size
     dtype: int
     default: '1'
-    hide: ${ 'part' if vlen == 1 else 'none' }
+    hide: ${ 'part' if fft_size == 1 else 'none' }
 -   id: sensor_count
     label: Sensor Count
     dtype: int
     default: '1'
-    hide: ${ 'part' if vlen == 1 else 'none' }
 -   id: thres
     label: Peak Threshold
     dtype: float

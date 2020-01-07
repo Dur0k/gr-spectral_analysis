@@ -43,7 +43,7 @@ class temperature_calc_ff(gr.sync_block):
         poly = numpy.array(polycoeff)
         poly[:,3] = poly[:,3] - fshift - offset - f[0]
         # For all shifted polynomials calculate roots
-        roots = numpy.empty((poly.shape[0],1))
+        roots = numpy.empty((poly.shape[0]))
         roots[:] = numpy.nan
         for i in range(0,poly.shape[0]):
             tmp = numpy.roots(poly[i])
@@ -63,18 +63,6 @@ class temperature_calc_ff(gr.sync_block):
         out = output_items[0]
         # <+signal processing here+>
         roots = self.temp_calc(in0, self.polycoeff, self.fshift, self.offset)
-        out[:] = roots.T
-        print(roots)
+        #roots = roots.T
+        out[:] = roots.astype(float)
         return len(output_items[0])
-
-'''
-        poly = self.import_poly(self.polyfile)
-    def import_poly(self, polyfile):
-        with open(polyfile) as f:
-            readerf = csv.reader(f)
-            poly = []
-            for rowf in readerf:
-                poly.append(rowf)
-        poly = numpy.array(poly,dtype="float")
-        return poly
-'''
