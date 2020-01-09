@@ -89,10 +89,10 @@ blocks:
     min_len: '200'
     orient: Qt.Horizontal
     rangeType: float
-    start: '-1200'
+    start: '-2000'
     step: '1'
     stop: '1200'
-    value: '-1200'
+    value: '-2000'
     widget: counter_slider
   states:
     bus_sink: false
@@ -322,7 +322,7 @@ blocks:
     alias: ''
     amp: '1'
     comment: ''
-    freq: variable_qtgui_range_1/10
+    freq: variable_qtgui_range_1+300
     maxoutbuf: '0'
     minoutbuf: '0'
     offset: '0'
@@ -372,7 +372,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [656, 132.0]
+    coordinate: [464, 204.0]
     rotation: 0
     state: true
 
