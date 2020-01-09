@@ -18,11 +18,11 @@ while True:
     if socks.get(socket) == zmq.POLLIN:
         message = socket.recv()
 
-    k = np.frombuffer(message, dtype=np.float32())
+    k = np.frombuffer(message, dtype=np.complex64)
     print("------------------------- NEW POLL ------------------------------")
     print(len(k))
     print(k)
-    #plt.plot(k)
-    #plt.show()
+    plt.plot(k)
+    plt.show()
 
 socket.close()

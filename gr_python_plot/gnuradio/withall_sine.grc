@@ -116,9 +116,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [176, 368]
+    coordinate: [384, 336.0]
     rotation: 0
-    state: enabled
+    state: true
 - name: blocks_stream_to_vector_0
   id: blocks_stream_to_vector
   parameters:
@@ -134,7 +134,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [328, 228]
+    coordinate: [656, 352.0]
     rotation: 0
     state: enabled
 - name: blocks_throttle_0
@@ -146,14 +146,14 @@ blocks:
     ignoretag: 'True'
     maxoutbuf: '0'
     minoutbuf: '0'
-    samples_per_second: samp_rate*10
+    samples_per_second: samp_rate
     type: complex
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [280, 380]
+    coordinate: [488, 348.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -233,7 +233,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [512, 400.0]
+    coordinate: [656, 208.0]
     rotation: 0
     state: true
 - name: spectral_analysis_peak_finding_cf_0
@@ -252,7 +252,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [792, 292.0]
+    coordinate: [992, 324.0]
     rotation: 0
     state: enabled
 - name: spectral_analysis_periodogram_py_cc_0
@@ -270,7 +270,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [560, 300]
+    coordinate: [808, 332.0]
     rotation: 0
     state: enabled
 - name: spectral_analysis_temperature_calc_ff_0
@@ -290,7 +290,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [512, 676.0]
+    coordinate: [360, 492.0]
     rotation: 0
     state: enabled
 - name: variable_qtgui_range_0
@@ -312,7 +312,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [16, 284]
+    coordinate: [80, 220.0]
     rotation: 0
     state: enabled
 - name: variable_qtgui_range_0_0
@@ -322,7 +322,7 @@ blocks:
     alias: ''
     amp: '1'
     comment: ''
-    freq: variable_qtgui_range_1+300
+    freq: variable_qtgui_range_1/10
     maxoutbuf: '0'
     minoutbuf: '0'
     offset: '0'
@@ -334,7 +334,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [40, 436]
+    coordinate: [80, 372.0]
     rotation: 0
     state: enabled
 - name: zeromq_push_sink_0_0
@@ -353,7 +353,26 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1328, 676.0]
+    coordinate: [1160, 492.0]
+    rotation: 0
+    state: true
+- name: zeromq_push_sink_0_0_0
+  id: zeromq_push_sink
+  parameters:
+    address: tcp://*:5559
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    pass_tags: 'False'
+    timeout: '10'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [656, 132.0]
     rotation: 0
     state: true
 
@@ -362,6 +381,7 @@ connections:
 - [blocks_stream_to_vector_0, '0', spectral_analysis_periodogram_py_cc_0, '0']
 - [blocks_throttle_0, '0', blocks_stream_to_vector_0, '0']
 - [blocks_throttle_0, '0', qtgui_freq_sink_x_0, '0']
+- [blocks_throttle_0, '0', zeromq_push_sink_0_0_0, '0']
 - [spectral_analysis_peak_finding_cf_0, '0', spectral_analysis_temperature_calc_ff_0,
   '0']
 - [spectral_analysis_periodogram_py_cc_0, '0', spectral_analysis_peak_finding_cf_0,
