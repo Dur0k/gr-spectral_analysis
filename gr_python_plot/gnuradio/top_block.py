@@ -73,7 +73,7 @@ class top_block(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.variable_qtgui_range_1 = variable_qtgui_range_1 = -1200
+        self.variable_qtgui_range_1 = variable_qtgui_range_1 = -2000
         self.sensor_count = sensor_count = 2
         self.samp_rate = samp_rate = 1e6/100
         self.plot = plot = 100
@@ -82,12 +82,12 @@ class top_block(gr.top_block, Qt.QWidget):
         ##################################################
         # Blocks
         ##################################################
-        self._variable_qtgui_range_1_range = Range(-1200, 1200, 1, -1200, 200)
+        self._variable_qtgui_range_1_range = Range(-2000, 1200, 1, -2000, 200)
         self._variable_qtgui_range_1_win = RangeWidget(self._variable_qtgui_range_1_range, self.set_variable_qtgui_range_1, 'variable_qtgui_range_1', "counter_slider", float)
         self.top_grid_layout.addWidget(self._variable_qtgui_range_1_win)
         self.zeromq_push_sink_0_0_0 = zeromq.push_sink(gr.sizeof_gr_complex, 1, 'tcp://*:5559', 10, False, -1)
         self.zeromq_push_sink_0_0 = zeromq.push_sink(gr.sizeof_float, 2, 'tcp://*:5558', 10, False, -1)
-        self.variable_qtgui_range_0_0 = analog.sig_source_c(samp_rate, analog.GR_SIN_WAVE, variable_qtgui_range_1/10, 1, 0, 0)
+        self.variable_qtgui_range_0_0 = analog.sig_source_c(samp_rate, analog.GR_SIN_WAVE, variable_qtgui_range_1+300, 1, 0, 0)
         self.variable_qtgui_range_0 = analog.sig_source_c(samp_rate, analog.GR_SIN_WAVE, variable_qtgui_range_1, 1, 0, 0)
         self.spectral_analysis_temperature_calc_ff_0 = spectral_analysis.temperature_calc_ff(sensor_count, [[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08]], 24e6 * 5, [130.0,200.0])
         self.spectral_analysis_periodogram_py_cc_0 = spectral_analysis.periodogram_py_cc(samp_rate, fft_size, 'boxcar')
@@ -164,7 +164,7 @@ class top_block(gr.top_block, Qt.QWidget):
     def set_variable_qtgui_range_1(self, variable_qtgui_range_1):
         self.variable_qtgui_range_1 = variable_qtgui_range_1
         self.variable_qtgui_range_0.set_frequency(self.variable_qtgui_range_1)
-        self.variable_qtgui_range_0_0.set_frequency(self.variable_qtgui_range_1/10)
+        self.variable_qtgui_range_0_0.set_frequency(self.variable_qtgui_range_1+300)
 
     def get_sensor_count(self):
         return self.sensor_count

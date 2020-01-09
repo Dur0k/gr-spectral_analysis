@@ -38,10 +38,10 @@ class temperature_calc_ff(gr.sync_block):
             in_sig=[(numpy.float32,self.sensor_count)],
             out_sig=[(numpy.float32,self.sensor_count)])
 
-    def temp_calc(self, f, polycoeff, fshift, offset):
-        f = numpy.array(f)
+    def temp_calc(self, freq, polycoeff, fshift, offset):
+        freq = numpy.array(freq)
         poly = numpy.array(polycoeff)
-        poly[:,3] = poly[:,3] - fshift - offset - f[0]
+        poly[:,3] = poly[:,3] - fshift - offset - freq[0]
         # For all shifted polynomials calculate roots
         roots = numpy.empty((poly.shape[0]))
         roots[:] = numpy.nan
@@ -57,7 +57,7 @@ class temperature_calc_ff(gr.sync_block):
             elif ((~numpy.isnan(tmp)).any() == True):
                 roots[i] = tmp[numpy.where(~numpy.isnan(tmp))]
         return roots
-        
+
     def work(self, input_items, output_items):
         in0 = input_items[0]
         out = output_items[0]
