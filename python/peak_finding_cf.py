@@ -18,9 +18,8 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 # 
-import sys
-sys.path.insert(0, "/home/durok/Nextcloud/Documents/Uni/ANT_Arbeit/temperaturfeld-demo")
-import function.peakutils
+
+import peakutils
 import numpy
 from gnuradio import gr
 
@@ -41,7 +40,7 @@ class peak_finding_cf(gr.sync_block):
     def peakfinding(self, f, Pxx, thres, min_dist, sensor_count):
         f_cyc = numpy.insert(f,0,f[len(f)-1])
         Pxx_cyc = abs(numpy.insert(Pxx,0,Pxx[len(f)-1]))
-        peaks = function.peakutils.indexes(Pxx_cyc, thres, min_dist)
+        peaks = peakutils.indexes(Pxx_cyc, thres, min_dist)
         peaks_zero = []
         # Set found peaks to zero
         peaks_zero = numpy.zeros(Pxx_cyc.shape)

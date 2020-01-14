@@ -73,7 +73,7 @@ def _update_function():
     return T, signal
 
 def _calc_spectrum(x, fA):
-    f, Pxx = sg.periodogram(x, fA, return_onesided=False, scaling='spectrum')
+    f, Pxx = sg.periodogram(x, fA, window=None, nfft=len(x)//2,return_onesided=False, scaling='spectrum')
     Pxx = Pxx[f.argsort()]
     f.sort()
     ptr = len(f)//2
