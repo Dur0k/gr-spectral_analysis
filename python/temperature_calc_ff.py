@@ -40,8 +40,11 @@ class temperature_calc_ff(gr.sync_block):
 
     def temp_calc(self, freq, polycoeff, fshift, offset):
         freq = numpy.array(freq)
+        freq = numpy.mean(freq,axis=0)
+        #freq = freq.reshape((freq.shape[1],))
         poly = numpy.array(polycoeff)
-        poly[:,3] = poly[:,3] - fshift - freq[0]- offset[:] 
+        offset = numpy.array(offset)
+        poly[:,3] = poly[:,3] - fshift - freq - offset
         # For all shifted polynomials calculate roots
         roots = numpy.empty((poly.shape[0]))
         roots[:] = numpy.nan
@@ -56,6 +59,7 @@ class temperature_calc_ff(gr.sync_block):
             # Otherwise if a Number exists save it to roots
             elif ((~numpy.isnan(tmp)).any() == True):
                 roots[i] = tmp[numpy.where(~numpy.isnan(tmp))]
+        print(roots)
         return roots
 
     def work(self, input_items, output_items):
