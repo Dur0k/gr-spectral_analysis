@@ -41,7 +41,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [608, 140]
+    coordinate: [328, 100.0]
     rotation: 0
     state: enabled
 - name: decimation
@@ -53,7 +53,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [440, 164]
+    coordinate: [216, 92.0]
     rotation: 0
     state: enabled
 - name: fft_size
@@ -65,7 +65,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [736, 66]
+    coordinate: [120, 76.0]
     rotation: 0
     state: enabled
 - name: gain
@@ -86,7 +86,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [144, 380]
+    coordinate: [136, 244.0]
     rotation: 0
     state: enabled
 - name: harmonic
@@ -98,7 +98,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [240, 164]
+    coordinate: [96, 156.0]
     rotation: 0
     state: enabled
 - name: lo_freq
@@ -110,7 +110,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [192, 268]
+    coordinate: [184, 156.0]
     rotation: 0
     state: enabled
 - name: looff
@@ -131,7 +131,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [48, 244.0]
+    coordinate: [24, 244.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -155,7 +155,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [485, 51]
+    coordinate: [8, 92.0]
     rotation: 0
     state: enabled
 - name: blocks_stream_to_vector_0
@@ -176,7 +176,25 @@ blocks:
     coordinate: [1022, 336]
     rotation: 0
     state: enabled
-- name: freq_xlating_fir_filter_xxx_0
+- name: blocks_vector_to_streams_0
+  id: blocks_vector_to_streams
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_streams: '3'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1232, 640.0]
+    rotation: 0
+    state: true
+- name: freq_xlating_fir_filter_xxx_0_0
   id: freq_xlating_fir_filter_xxx
   parameters:
     affinity: ''
@@ -193,9 +211,278 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [736, 308.0]
+    coordinate: [648, 300.0]
     rotation: 0
     state: enabled
+- name: qtgui_freq_sink_x_0
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    axislabels: 'True'
+    bw: 2000*harmonic
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    ctrlpanel: 'False'
+    fc: '0'
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label: Relative Gain
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    nconnections: '1'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: complex
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: firdes.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1168, 136.0]
+    rotation: 0
+    state: true
+- name: qtgui_number_sink_0
+  id: qtgui_number_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    autoscale: 'True'
+    avg: '0'
+    color1: ("black", "black")
+    color10: ("black", "black")
+    color2: ("black", "black")
+    color3: ("black", "black")
+    color4: ("black", "black")
+    color5: ("black", "black")
+    color6: ("black", "black")
+    color7: ("black", "black")
+    color8: ("black", "black")
+    color9: ("black", "black")
+    comment: ''
+    factor1: '1'
+    factor10: '1'
+    factor2: '1'
+    factor3: '1'
+    factor4: '1'
+    factor5: '1'
+    factor6: '1'
+    factor7: '1'
+    factor8: '1'
+    factor9: '1'
+    graph_type: qtgui.NUM_GRAPH_HORIZ
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    max: '40'
+    min: '0'
+    name: '""'
+    nconnections: '1'
+    type: float
+    unit1: ''
+    unit10: ''
+    unit2: ''
+    unit3: ''
+    unit4: ''
+    unit5: ''
+    unit6: ''
+    unit7: ''
+    unit8: ''
+    unit9: ''
+    update_time: '0.10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1480, 612.0]
+    rotation: 0
+    state: true
+- name: qtgui_number_sink_0_0
+  id: qtgui_number_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    autoscale: 'True'
+    avg: '0'
+    color1: ("black", "black")
+    color10: ("black", "black")
+    color2: ("black", "black")
+    color3: ("black", "black")
+    color4: ("black", "black")
+    color5: ("black", "black")
+    color6: ("black", "black")
+    color7: ("black", "black")
+    color8: ("black", "black")
+    color9: ("black", "black")
+    comment: ''
+    factor1: '1'
+    factor10: '1'
+    factor2: '1'
+    factor3: '1'
+    factor4: '1'
+    factor5: '1'
+    factor6: '1'
+    factor7: '1'
+    factor8: '1'
+    factor9: '1'
+    graph_type: qtgui.NUM_GRAPH_HORIZ
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    max: '40'
+    min: '4'
+    name: '""'
+    nconnections: '1'
+    type: float
+    unit1: ''
+    unit10: ''
+    unit2: ''
+    unit3: ''
+    unit4: ''
+    unit5: ''
+    unit6: ''
+    unit7: ''
+    unit8: ''
+    unit9: ''
+    update_time: '0.10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1464, 692.0]
+    rotation: 0
+    state: true
+- name: qtgui_number_sink_0_0_0
+  id: qtgui_number_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    autoscale: 'True'
+    avg: '0'
+    color1: ("black", "black")
+    color10: ("black", "black")
+    color2: ("black", "black")
+    color3: ("black", "black")
+    color4: ("black", "black")
+    color5: ("black", "black")
+    color6: ("black", "black")
+    color7: ("black", "black")
+    color8: ("black", "black")
+    color9: ("black", "black")
+    comment: ''
+    factor1: '1'
+    factor10: '1'
+    factor2: '1'
+    factor3: '1'
+    factor4: '1'
+    factor5: '1'
+    factor6: '1'
+    factor7: '1'
+    factor8: '1'
+    factor9: '1'
+    graph_type: qtgui.NUM_GRAPH_HORIZ
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    max: '40'
+    min: '4'
+    name: '""'
+    nconnections: '1'
+    type: float
+    unit1: ''
+    unit10: ''
+    unit2: ''
+    unit3: ''
+    unit4: ''
+    unit5: ''
+    unit6: ''
+    unit7: ''
+    unit8: ''
+    unit9: ''
+    update_time: '0.10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1448, 820.0]
+    rotation: 0
+    state: true
 - name: spectral_analysis_peak_finding_cf_0
   id: spectral_analysis_peak_finding_cf
   parameters:
@@ -224,7 +511,7 @@ blocks:
     fft_size: fft_size
     maxoutbuf: '0'
     minoutbuf: '0'
-    sample_rate: samp_rate
+    sample_rate: samp_rate/100
     window: boxcar
   states:
     bus_sink: false
@@ -239,21 +526,22 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    fshift: 24e6 * 5
+    fshift: 24e6 * harmonic
     maxoutbuf: '0'
     minoutbuf: '0'
-    offset: '[130.0,200.0]'
-    polycoeff: '[[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[2.22769620e-02,
-      -1.70367733e+00, -1.58914013e+01, 1.19999708e+08]]'
+    offset: '[0,0,0]'
+    polycoeff: '[[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[3.75334018e-02,
+      -2.24642587, -3.69621493e+01, 1.20001284e+08],[3.75334018e-02, -2.24642587,
+      -3.69621493e+01, 1.20001284e+08]]'
     sensor_count: sensor_count
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [720, 485]
+    coordinate: [648, 484.0]
     rotation: 0
     state: enabled
-- name: uhd_usrp_source_0
+- name: uhd_usrp_source_0_0
   id: uhd_usrp_source
   parameters:
     affinity: ''
@@ -621,13 +909,13 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [376, 276]
+    coordinate: [384, 284.0]
     rotation: 0
     state: enabled
 - name: zeromq_push_sink_0_0
   id: zeromq_push_sink
   parameters:
-    address: tcp://*:5558
+    address: tcp://*:5588
     affinity: ''
     alias: ''
     comment: ''
@@ -646,7 +934,7 @@ blocks:
 - name: zeromq_push_sink_0_0_0
   id: zeromq_push_sink
   parameters:
-    address: tcp://*:5559
+    address: tcp://*:5589
     affinity: ''
     alias: ''
     comment: ''
@@ -665,8 +953,12 @@ blocks:
 
 connections:
 - [blocks_stream_to_vector_0, '0', spectral_analysis_periodogram_py_cc_0, '0']
-- [freq_xlating_fir_filter_xxx_0, '0', blocks_stream_to_vector_0, '0']
-- [freq_xlating_fir_filter_xxx_0, '0', zeromq_push_sink_0_0_0, '0']
+- [blocks_vector_to_streams_0, '0', qtgui_number_sink_0, '0']
+- [blocks_vector_to_streams_0, '1', qtgui_number_sink_0_0, '0']
+- [blocks_vector_to_streams_0, '2', qtgui_number_sink_0_0_0, '0']
+- [freq_xlating_fir_filter_xxx_0_0, '0', blocks_stream_to_vector_0, '0']
+- [freq_xlating_fir_filter_xxx_0_0, '0', zeromq_push_sink_0_0_0, '0']
+- [spectral_analysis_peak_finding_cf_0, '0', blocks_vector_to_streams_0, '0']
 - [spectral_analysis_peak_finding_cf_0, '0', spectral_analysis_temperature_calc_ff_0,
   '0']
 - [spectral_analysis_periodogram_py_cc_0, '0', spectral_analysis_peak_finding_cf_0,
@@ -674,7 +966,7 @@ connections:
 - [spectral_analysis_periodogram_py_cc_0, '1', spectral_analysis_peak_finding_cf_0,
   '1']
 - [spectral_analysis_temperature_calc_ff_0, '0', zeromq_push_sink_0_0, '0']
-- [uhd_usrp_source_0, '0', freq_xlating_fir_filter_xxx_0, '0']
+- [uhd_usrp_source_0_0, '0', freq_xlating_fir_filter_xxx_0_0, '0']
 
 metadata:
   file_format: 1

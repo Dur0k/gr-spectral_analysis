@@ -41,7 +41,7 @@ class temperature_calc_ff(gr.sync_block):
     def temp_calc(self, freq, polycoeff, fshift, offset):
         freq = numpy.array(freq)
         poly = numpy.array(polycoeff)
-        poly[:,3] = poly[:,3] - fshift - offset - freq[0]
+        poly[:,3] = poly[:,3] - fshift - freq[0]- offset[:] 
         # For all shifted polynomials calculate roots
         roots = numpy.empty((poly.shape[0]))
         roots[:] = numpy.nan
@@ -63,6 +63,5 @@ class temperature_calc_ff(gr.sync_block):
         out = output_items[0]
         # <+signal processing here+>
         roots = self.temp_calc(in0, self.polycoeff, self.fshift, self.offset)
-        #roots = roots.T
         out[:] = roots.astype(float)
         return len(output_items[0])
