@@ -34,13 +34,15 @@ class qa_temperature_calc_ff(gr_unittest.TestCase):
     def test_001_t(self):
         # set up fg
         sensor_count = 3
-        polycoeff = [[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[3.75334018e-02, -2.24642587e+00, -3.69621493e+01, 1.20001284e+08],[1.41016716e-02, -1.21260981e+00, -4.59088135e+01, 1.20001834e+08]]
-        polycoeff = numpy.array(polycoeff)
+        p_5=numpy.array([2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08])
+        p_10=numpy.array([3.75334018e-02, -2.24642587e+00, -3.69621493e+01, 1.20001284e+08])
+        p_14=numpy.array([1.41016716e-02, -1.21260981e+00, -4.59088135e+01, 1.20001834e+08])
+        polycoeff=numpy.stack((p_5,p_14,p_10),axis=0)
         fshift = 24e6 * 5
         #offset = numpy.array([130.0,860.0,-300.0])
-        offset = numpy.array([130.0,280.,360.])
+        offset = numpy.array([130,860,-300])
         #offset = numpy.array([130.0])
-        src_data = (-1250.,-350., 180.)
+        src_data = (-1386.7188,-527.34375,34.179688)
         src_data = numpy.array(src_data)
         src = blocks.vector_source_f(src_data, vlen=sensor_count)
         
