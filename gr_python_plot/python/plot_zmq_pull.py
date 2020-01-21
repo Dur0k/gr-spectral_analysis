@@ -10,12 +10,12 @@ from bokeh.layouts import gridplot, column
 from bokeh.colors import groups
 
 # Input variables
-port_temp = 5558
-port_sig = 5559
+port_temp = 5588
+port_sig = 5589
 
 # gr variables
 fA = 1e6/100
-sensor_count = 2
+sensor_count = 3
 
 # zmq stuff
 context = zmq.Context()
@@ -32,7 +32,6 @@ poller_sig.register(socket_sig, zmq.POLLIN)
 # bokeh stuff
 ## Temperature Plot
 p0 = figure(title="Temperature", y_range=(0, 40), plot_height=500, plot_width=1000, tools="xpan,xwheel_zoom,xbox_zoom,reset", y_axis_location="left")
-#p0.xaxis.axis_label = 'Time'
 p0.yaxis.axis_label = 'Temperature [°C]'
 p0.x_range.follow = "end"
 p0.x_range.follow_interval = 500
@@ -51,9 +50,11 @@ for i in range(0, sensor_count):
 
 
 ## Spectrum Plot
+
 source_fft = ColumnDataSource(dict(
     freq=[], sp=[]
 ))
+
 p1 = figure(title="Spectrum", y_range=(10**-10, 1), x_range=(-2500, 2500), plot_height=500, plot_width=1000, y_axis_type='log', tools="xpan,xwheel_zoom,xbox_zoom,reset", y_axis_location="left")
 p1.xaxis.axis_label = 'Frequency [Hz]'
 p1.line(x='freq', y='sp', source=source_fft, line_width=2, line_color='black')
@@ -73,7 +74,7 @@ def _update_function():
     return T, signal
 
 def _calc_spectrum(x, fA):
-    f, Pxx = sg.periodogram(x, fA, window=None, nfft=len(x)//2,return_onesided=False, scaling='spectrum')
+    f, Pxx = sg.periodogram(x, fA, window=None, nfft=len(x),return_onesided=False, scaling='spectrum')
     Pxx = Pxx[f.argsort()]
     f.sort()
     ptr = len(f)//2
@@ -102,12 +103,15 @@ def update(t):
         freq=f,
         sp=Pxx,
     )
+
+    source_fft.data = new_fft_data
     source.stream(new_data, 500)
-    source_fft.stream(new_fft_data, len(Pxx))
+    #source_fft.stream(new_fft_data, len(Pxx))
 
-
-
-curdoc().add_root(column(p0, p1))
+curdoc().add_root(column(p0, p1))#
 curdoc().add_periodic_callback(update, 20)
 curdoc().title = "test plot"
+
+#socket_temp.close()
+#socket_sig.close()
 
