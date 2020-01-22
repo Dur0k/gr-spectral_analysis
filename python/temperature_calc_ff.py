@@ -21,12 +21,16 @@
 
 
 import numpy
-import csv
 from gnuradio import gr
 
 class temperature_calc_ff(gr.sync_block):
     """
-    docstring for block temperature_calc_ff
+    Block calculates Temperatures of quarz oscillators based on their frequency and approximated  temperature characteristic. Takes a vector of frequencies as input and ouputs an equal amount of temperatures.
+    Args:
+    - Sensor Count: number of sensors and expected number of frequencies
+    - Polynomial Coefficients: coefficients for approximated thermal behaviour of oscillator frequency, expects [Sensor Countx4] matrix
+    - Frequency Shift: Frequency shift in [Hz] of original signal to baseband signal at USRP
+    - Frequency Offset: Frequency offset of sensors, expects 1xSensor Count
     """
     def __init__(self, sensor_count, polycoeff, fshift, offset):
         self.sensor_count = sensor_count
