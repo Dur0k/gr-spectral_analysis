@@ -146,7 +146,7 @@ blocks:
     ignoretag: 'True'
     maxoutbuf: '0'
     minoutbuf: '0'
-    samples_per_second: samp_rate
+    samples_per_second: samp_rate*10
     type: complex
     vlen: '1'
   states:
@@ -312,7 +312,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [80, 220.0]
+    coordinate: [79, 222]
     rotation: 0
     state: enabled
 - name: variable_qtgui_range_0_0
@@ -340,7 +340,7 @@ blocks:
 - name: zeromq_push_sink_0_0
   id: zeromq_push_sink
   parameters:
-    address: tcp://*:5558
+    address: tcp://*:5588
     affinity: ''
     alias: ''
     comment: ''
@@ -359,7 +359,7 @@ blocks:
 - name: zeromq_push_sink_0_0_0
   id: zeromq_push_sink
   parameters:
-    address: tcp://*:5559
+    address: tcp://*:5589
     affinity: ''
     alias: ''
     comment: ''
