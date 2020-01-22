@@ -25,7 +25,14 @@ from gnuradio import gr
 
 class peak_finding_cf(gr.sync_block):
     """
-    docstring for block peak_finding_cf
+    Block to find peaks in input spectrum. Takes in float f and complex Pxx vectors and ouputs vector with peaks of length Sensor Count.
+    Args:
+    - FFT Size: sets input vector length
+    - Threshold: normalized threshold, only peaks higher amplitude will be detected
+    - Peak Distance: Minimum distance between each detected peak
+
+    Reference:
+    https://peakutils.readthedocs.io/en/latest/reference.html
     """
     def __init__(self,fft_size, sensor_count, thres, min_dist):
         self.fft_size = fft_size

@@ -26,11 +26,13 @@ from gnuradio import gr
 
 class periodogram_py_cc(gr.sync_block):
     """
-    docstring for block periodogram_py_cc
+    Block performs spectral analysis using Periodogram with different windows. A complex vector is defined and input. The block outputs two vectors with the frequency and the complex power of the spectrum.
     Args:
         sample_rate: Incoming stream sample rate
-        fft_size: Number of FFT bins
-        window: the window taps generation function
+        fft_size: Number of FFT bins and input/output vector length
+        window: the window used for Periodogram
+    Reference:
+    https://docs.scipy.org/doc/scipy-0.13.0/reference/generated/scipy.signal.periodogram.html
     """
     def __init__(self, sample_rate, fft_size, window):
         self.sample_rate = sample_rate
