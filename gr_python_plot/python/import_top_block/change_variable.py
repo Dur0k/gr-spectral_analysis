@@ -5,18 +5,17 @@ import signal
 from time import sleep
 import numpy
 from withall_sine import top_block
+import zmq
 
-#tb = top_block()
-#tb.start()
-#tb.stop()
-#tb.wait()
-#tb.stop()
-#tb.wait()
-#freq = input('Frequency: ')
-#tb.set_freq(float(freq))
-#tb.start()
+
 
 def main(top_block_cls=top_block, options=None):
+    # ZMQ PULL
+    context = zmq.Context()
+    socket = context.socket(zmq.PULL)
+    socket.connect("tcp://localhost:5555")
+    poller = zmq.Poller()
+    poller.register(socket, zmq.POLLIN)
     tb = top_block_cls()
     def sig_handler(sig=None, frame=None):
         tb.stop()
@@ -27,8 +26,11 @@ def main(top_block_cls=top_block, options=None):
     signal.signal(signal.SIGTERM, sig_handler)
 
     while True:
-        freq = input('Frequency: ')
-        tb.set_freq(float(freq))
+        socks = dict(poller.poll(10))
+        if socks.get(socket) == zmq.POLLIN:
+            message = socket.recv()
+            tb.set_freq(float(message.decode("utf-8")))
+
         tb.start()
         sleep(5)
         tb.stop()
