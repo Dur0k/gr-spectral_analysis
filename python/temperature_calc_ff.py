@@ -64,7 +64,7 @@ class temperature_calc_ff(gr.sync_block):
             # Otherwise if a Number exists save it to roots
             elif ((~numpy.isnan(tmp)).any() == True):
                 roots[i] = tmp[numpy.where(~numpy.isnan(tmp))]
-        roots = roots.reshape(1,3)
+        roots = roots.reshape(1,len(roots))
         print(roots)
         return roots
 
