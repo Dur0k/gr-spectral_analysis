@@ -29,12 +29,11 @@ def main(top_block_cls=top_block, options=None):
         socks = dict(poller.poll(10))
         if socks.get(socket) == zmq.POLLIN:
             message = socket.recv_pyobj()
-            print(int(message[1]))
             tb.set_freq(float(message[0]))
             #print(type(values[2]))
             tb.set_sensor_count(int(message[1]))
-            tb.set_poly_coeff(message[2])
-            tb.set_offset(message[3])
+            tb.set_poly_coeff(numpy.asarray(message[2]))
+            tb.set_offset(numpy.asarray(message[3]))
             #print(values)
 
         tb.start()

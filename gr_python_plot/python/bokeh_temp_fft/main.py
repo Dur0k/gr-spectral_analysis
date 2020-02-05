@@ -4,7 +4,7 @@ import numpy
 from scipy import signal as sg
 from bokeh.driving import count
 from bokeh.plotting import figure, curdoc
-from bokeh.models import ColumnDataSource, RangeTool, Slider
+from bokeh.models import ColumnDataSource, RangeTool, Slider, Button
 from bokeh.layouts import gridplot, column, row
 from bokeh.colors import groups
 from bokeh.models.widgets import RangeSlider, TextInput
@@ -71,8 +71,8 @@ poller_sig.register(socket_sig, zmq.POLLIN)
 freq_input = TextInput(title="Frequency of sines", value=str(-3000))
 sensor_count_input = TextInput(title="Sensor Count", value=str(2))
 poly_coeff_input = TextInput(title="Polynomial Coefficients", value=str([[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08]]))
-offset_input = TextInput(title="Sensor Count", value=str([130.0,200.0]))
-
+offset_input = TextInput(title="Offset", value=str([130.0,200.0]))
+apply_button = Button(label="Apply Settings", button_type="success")
 
 ## Temperature Plot# y_range=(0, 40), tools="xpan,xwheel_zoom,xbox_zoom,reset", 
 p0 = figure(title=p0_title, y_range=p0_y_range, plot_height=p0_plot_height, plot_width=p0_plot_width, tools=p0_tools, y_axis_location="left")
@@ -166,20 +166,26 @@ def update(t):
 
 
 def update_slider():
+    print('u')
     #freq = str(freq_input.value).encode()
     #sensor_count = str(sensor_count_input.value).encode()
     #ii = (str(freq_input.value) + ';' +  str(sensor_count_input.value) + ';' + str(poly_coeff_input.value)).encode()
-    ii = [freq_input.value, sensor_count_input.value, poly_coeff_input.value, offset_input.value]
     #print(ii.decode("utf-8"))
     #print(str(y_axis_slider.value))
+
+
+def update_variables():
+    ii = [freq_input.value, sensor_count_input.value, poly_coeff_input.value, offset_input.value]
     socket_send.send_pyobj(ii)
+
 
 freq_input.on_change('value', lambda attr, old, new: update_slider())
 sensor_count_input.on_change('value', lambda attr, old, new: update_slider())
 poly_coeff_input.on_change('value', lambda attr, old, new: update_slider())
 offset_input.on_change('value', lambda attr, old, new: update_slider())
+apply_button.on_click(update_variables)
 
-curdoc().add_root(row(p1, p0, freq_input, sensor_count_input, poly_coeff_input, offset_input))#
+curdoc().add_root(row(p1, p0, freq_input, sensor_count_input, poly_coeff_input, offset_input, apply_button))
 curdoc().add_periodic_callback(update, p_update)
 curdoc().title = "test plot"
 

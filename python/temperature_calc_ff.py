@@ -48,8 +48,15 @@ class temperature_calc_ff(gr.sync_block):
         freq = numpy.sort(freq)
         freq = freq.reshape(1,self.sensor_count)
         poly = numpy.array(polycoeff)
-        offset = numpy.array(offset).reshape(1,self.sensor_count)
-        poly[:,3] = poly[:,3] - fshift - offset[:] - freq
+        offset = numpy.array(offset)
+
+        offset = offset.reshape(1,self.sensor_count)
+        print(poly[:,3])
+        print(fshift)
+        print(freq)
+        print(offset)
+        poly[:,3] = poly[:,3] - fshift - offset - freq
+ 
         # For all shifted polynomials calculate roots
         roots = numpy.empty((poly.shape[0]))
         roots[:] = numpy.nan
