@@ -68,7 +68,11 @@ poller_sig.register(socket_sig, zmq.POLLIN)
 
 ## Input controls
 #freq_slider = Slider(title="Frequency of sines", value=-3000, start=-3000, end=3000, step=100, callback_policy='mouseup')
-freq_slider = TextInput(title="Frequency of sines")
+freq_input = TextInput(title="Frequency of sines", value=str(-3000))
+sensor_count_input = TextInput(title="Sensor Count", value=str(2))
+poly_coeff_input = TextInput(title="Polynomial Coefficients", value=str([[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08]]))
+offset_input = TextInput(title="Sensor Count", value=str([130.0,200.0]))
+
 
 ## Temperature Plot# y_range=(0, 40), tools="xpan,xwheel_zoom,xbox_zoom,reset", 
 p0 = figure(title=p0_title, y_range=p0_y_range, plot_height=p0_plot_height, plot_width=p0_plot_width, tools=p0_tools, y_axis_location="left")
@@ -142,8 +146,6 @@ def _replaceNaN(x):
     x[i, j] = 0.0
     return x
 
-farray = (-3000,-2000,-1000,-500,0,500,1000,2000)
-ia = 0
 @count()
 def update(t):
     T, signal = _update_data()
@@ -161,20 +163,23 @@ def update(t):
     )
     source_fft.data = new_fft_data
     source.stream(new_data, 500)
-    #source_fft.stream(new_fft_data, len(Pxx))
 
-
-#y_axis_slider = RangeSlider(start=-20, end=50, value=(0,40), step=1, callback_policy='mouseup')
-#y_axis_slider.on_change('value',lambda attr, old, new: update())
 
 def update_slider():
-    ii = str(freq_slider.value).encode()
-    print(ii.decode("utf-8"))
+    #freq = str(freq_input.value).encode()
+    #sensor_count = str(sensor_count_input.value).encode()
+    #ii = (str(freq_input.value) + ';' +  str(sensor_count_input.value) + ';' + str(poly_coeff_input.value)).encode()
+    ii = [freq_input.value, sensor_count_input.value, poly_coeff_input.value, offset_input.value]
+    #print(ii.decode("utf-8"))
     #print(str(y_axis_slider.value))
-    socket_send.send(ii)
+    socket_send.send_pyobj(ii)
 
-freq_slider.on_change('value', lambda attr, old, new: update_slider())
-curdoc().add_root(row(p1, p0, freq_slider))#
+freq_input.on_change('value', lambda attr, old, new: update_slider())
+sensor_count_input.on_change('value', lambda attr, old, new: update_slider())
+poly_coeff_input.on_change('value', lambda attr, old, new: update_slider())
+offset_input.on_change('value', lambda attr, old, new: update_slider())
+
+curdoc().add_root(row(p1, p0, freq_input, sensor_count_input, poly_coeff_input, offset_input))#
 curdoc().add_periodic_callback(update, p_update)
 curdoc().title = "test plot"
 

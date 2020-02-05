@@ -67,6 +67,18 @@ class temperature_calc_ff(gr.sync_block):
         roots = roots.reshape(1,len(roots))
         print(roots)
         return roots
+    
+    def set_sensor_count(self, sensor_count):
+        self.sensor_count = sensor_count
+
+    def get_sensor_count(self):
+        return self.sensor_count
+
+    def set_offset(self, offset):
+        self.offset = offset
+
+    def get_offset(self):
+        return self.offset
 
     def work(self, input_items, output_items):
         in0 = input_items[0]

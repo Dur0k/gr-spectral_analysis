@@ -73,6 +73,12 @@ class peak_finding_cf(gr.sync_block):
         f_per = f_cyc[peaks]
         return f_per
 
+    def set_sensor_count(self, sensor_count):
+        self.sensor_count = sensor_count
+
+    def get_sensor_count(self):
+        return self.sensor_count
+
     def work(self, input_items, output_items):
         in0 = input_items[0]
         in1 = input_items[1]
