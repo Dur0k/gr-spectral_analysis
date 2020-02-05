@@ -32,14 +32,14 @@ def main(top_block_cls=top_block, options=None):
             tb.set_freq(float(message.decode("utf-8")))
 
         tb.start()
-        sleep(5)
+        sleep(0.005)
         tb.stop()
         tb.wait()
     try:
         input('Press Enter to quit: ')
     except EOFError:
         pass
-    
+
 
 
 

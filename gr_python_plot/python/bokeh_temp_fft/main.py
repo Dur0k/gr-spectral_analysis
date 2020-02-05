@@ -4,14 +4,15 @@ import numpy
 from scipy import signal as sg
 from bokeh.driving import count
 from bokeh.plotting import figure, curdoc
-from bokeh.models import ColumnDataSource, RangeTool
+from bokeh.models import ColumnDataSource, RangeTool, Slider
 from bokeh.layouts import gridplot, column, row
 from bokeh.colors import groups
-#from bokeh.models.widgets import RangeSlider
+from bokeh.models.widgets import RangeSlider, TextInput
 
 # zmq variables
 port_temp = 5588
 port_sig = 5589
+port_send = 5555
 
 # gr variables
 fA = 1e6/100
@@ -49,13 +50,14 @@ p1_ylabel = "Spectrum"
 p1_title = "Periodogram of baseband signal"
 p1_tools = "xpan,xbox_zoom,save,reset"
 
-
 # zmq stuff
 context = zmq.Context()
 socket_temp = context.socket(zmq.PULL)
 socket_temp.connect("tcp://localhost:"+str(port_temp))
 socket_sig = context.socket(zmq.PULL)
 socket_sig.connect("tcp://localhost:"+str(port_sig))
+socket_send = context.socket(zmq.PUSH)
+socket_send.bind("tcp://*:"+str(port_send))
 poller_temp = zmq.Poller()
 poller_sig = zmq.Poller()
 poller_temp.register(socket_temp, zmq.POLLIN)
@@ -63,6 +65,10 @@ poller_sig.register(socket_sig, zmq.POLLIN)
  
 
 # bokeh stuff
+
+## Input controls
+#freq_slider = Slider(title="Frequency of sines", value=-3000, start=-3000, end=3000, step=100, callback_policy='mouseup')
+freq_slider = TextInput(title="Frequency of sines")
 
 ## Temperature Plot# y_range=(0, 40), tools="xpan,xwheel_zoom,xbox_zoom,reset", 
 p0 = figure(title=p0_title, y_range=p0_y_range, plot_height=p0_plot_height, plot_width=p0_plot_width, tools=p0_tools, y_axis_location="left")
@@ -136,6 +142,8 @@ def _replaceNaN(x):
     x[i, j] = 0.0
     return x
 
+farray = (-3000,-2000,-1000,-500,0,500,1000,2000)
+ia = 0
 @count()
 def update(t):
     T, signal = _update_data()
@@ -156,13 +164,19 @@ def update(t):
     #source_fft.stream(new_fft_data, len(Pxx))
 
 
-###y_axis_slider = RangeSlider(start=-20, end=50, value=(0,40), step=1, callback_policy='mouseup')
-###y_axis_slider.on_change('value',lambda attr, old, new: update())
+#y_axis_slider = RangeSlider(start=-20, end=50, value=(0,40), step=1, callback_policy='mouseup')
+#y_axis_slider.on_change('value',lambda attr, old, new: update())
 
-curdoc().add_root(row(p1, p0))#
+def update_slider():
+    ii = str(freq_slider.value).encode()
+    print(ii.decode("utf-8"))
+    #print(str(y_axis_slider.value))
+    socket_send.send(ii)
+
+freq_slider.on_change('value', lambda attr, old, new: update_slider())
+curdoc().add_root(row(p1, p0, freq_slider))#
 curdoc().add_periodic_callback(update, p_update)
 curdoc().title = "test plot"
 
 #socket_temp.close()
 #socket_sig.close()
-
