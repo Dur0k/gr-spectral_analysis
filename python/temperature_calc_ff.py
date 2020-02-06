@@ -49,11 +49,7 @@ class temperature_calc_ff(gr.sync_block):
         freq = freq.reshape(1,self.sensor_count)
         poly = numpy.array(polycoeff)
         offset = numpy.asarray(offset)
-        #print(offset)
         offset = offset.reshape(1,self.sensor_count)
-        #print(poly[:,3])
-        #print(fshift)
-        #print(freq)
         
         poly[:,3] = poly[:,3] - fshift - offset - freq
  
@@ -86,6 +82,18 @@ class temperature_calc_ff(gr.sync_block):
 
     def get_offset(self):
         return self.offset
+
+    def set_fshift(self, fshift):
+        self.fshift = fshift
+
+    def get_fshift(self):
+        return self.fshift
+
+    def set_polycoeff(self, polycoeff):
+        self.polycoeff = polycoeff
+
+    def get_polycoeff(self):
+        return self.polycoeff
 
     def work(self, input_items, output_items):
         in0 = input_items[0]

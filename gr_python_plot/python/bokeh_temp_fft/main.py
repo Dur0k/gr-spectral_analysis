@@ -72,6 +72,11 @@ freq_input = TextInput(title="Frequency of sines", value=str(-3000))
 sensor_count_input = TextInput(title="Sensor Count", value=str(2))
 poly_coeff_input = TextInput(title="Polynomial Coefficients", value=str([[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08]]))
 offset_input = TextInput(title="Offset", value=str([130.0,200.0]))
+fshift_input = TextInput(title="Frequency Shift", value='24e6 * 5')
+fft_size_input = TextInput(title="FFT Size", value=str(1024))
+samp_rate_input = TextInput(title="Sampling Rate", value=str(10000))
+thres_input = TextInput(title="Peak Threshold", value=str(0.03))
+min_dist_input = TextInput(title="Min Peak Distance", value=str(1))
 apply_button = Button(label="Apply Settings", button_type="success")
 
 ## Temperature Plot# y_range=(0, 40), tools="xpan,xwheel_zoom,xbox_zoom,reset", 
@@ -175,7 +180,7 @@ def update_slider():
 
 
 def update_variables():
-    ii = [freq_input.value, sensor_count_input.value, poly_coeff_input.value, offset_input.value]
+    ii = [freq_input.value, sensor_count_input.value, poly_coeff_input.value, offset_input.value, fshift_input.value, fft_size_input.value, samp_rate_input.value, thres_input.value, min_dist_input.value]
     socket_send.send_pyobj(ii)
 
 
@@ -183,9 +188,16 @@ freq_input.on_change('value', lambda attr, old, new: update_slider())
 sensor_count_input.on_change('value', lambda attr, old, new: update_slider())
 poly_coeff_input.on_change('value', lambda attr, old, new: update_slider())
 offset_input.on_change('value', lambda attr, old, new: update_slider())
+fshift_input.on_change('value', lambda attr, old, new: update_slider())
+fft_size_input.on_change('value', lambda attr, old, new: update_slider())
+samp_rate_input.on_change('value', lambda attr, old, new: update_slider())
+thres_input.on_change('value', lambda attr, old, new: update_slider())
+min_dist_input.on_change('value', lambda attr, old, new: update_slider())
 apply_button.on_click(update_variables)
 
-curdoc().add_root(row(p1, p0, freq_input, sensor_count_input, poly_coeff_input, offset_input, apply_button))
+input_c = column(freq_input, sensor_count_input, poly_coeff_input, offset_input, fshift_input, fft_size_input, samp_rate_input, thres_input, min_dist_input, apply_button)
+
+curdoc().add_root(row(p1, p0, input_c))
 curdoc().add_periodic_callback(update, p_update)
 curdoc().title = "test plot"
 

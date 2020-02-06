@@ -79,6 +79,12 @@ class peak_finding_cf(gr.sync_block):
     def get_sensor_count(self):
         return self.sensor_count
 
+    def set_fft_size(self, fft_size):
+        self.fft_size = fft_size
+
+    def get_fft_size(self):
+        return self.fft_size
+
     def work(self, input_items, output_items):
         in0 = input_items[0]
         in1 = input_items[1]

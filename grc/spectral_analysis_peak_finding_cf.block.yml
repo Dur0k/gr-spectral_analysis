@@ -18,7 +18,7 @@ parameters:
     label: Peak Threshold
     dtype: float
 -   id: min_dist
-    label: Peak Distance
+    label: Min Peak Distance
     dtype: float
 
 inputs:

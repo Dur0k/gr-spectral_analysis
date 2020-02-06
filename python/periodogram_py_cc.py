@@ -43,7 +43,17 @@ class periodogram_py_cc(gr.sync_block):
             in_sig=[(numpy.complex64,self.fft_size)],
             out_sig=[(numpy.float32,self.fft_size),(numpy.complex64,self.fft_size)])
         
+    def set_fft_size(self, fft_size):
+        self.fft_size = fft_size
 
+    def get_fft_size(self):
+        return self.fft_size
+
+    def set_sample_rate(self, sample_rate):
+        self.fft_size = sample_rate
+
+    def get_sample_rate(self):
+        return self.sample_rate
 
     def work(self, input_items, output_items):
         in0 = input_items[0]

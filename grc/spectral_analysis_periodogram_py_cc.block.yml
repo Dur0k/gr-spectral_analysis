@@ -6,7 +6,7 @@ category: '[spectral_analysis]'
 
 parameters:
 -   id: sample_rate
-    label: Sample Rate
+    label: Sampling Rate
     dtype: float
 -   id: fft_size
     label: FFT Size
