@@ -73,7 +73,7 @@ class top_block(gr.top_block):
 
     def set_sensor_count(self, sensor_count):
         self.sensor_count = sensor_count
-        print(self.sensor_count)
+        #print(self.sensor_count)
         self.spectral_analysis_temperature_calc_ff_0.set_sensor_count(self.sensor_count)
         self.spectral_analysis_peak_finding_cf_0.set_sensor_count(self.sensor_count)
 

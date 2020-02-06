@@ -33,7 +33,8 @@ def main(top_block_cls=top_block, options=None):
             #print(type(values[2]))
             tb.set_sensor_count(int(message[1]))
             tb.set_poly_coeff(numpy.asarray(message[2]))
-            tb.set_offset(numpy.asarray(message[3]))
+            print(type(message[3]))
+            tb.set_offset(numpy.asarray(eval(message[3])))
             #print(values)
 
         tb.start()
