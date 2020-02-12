@@ -1,6 +1,8 @@
 import zmq
 import time
 import numpy
+import threading
+
 from scipy import signal as sg
 from bokeh.driving import count
 from bokeh.plotting import figure, curdoc
@@ -22,7 +24,7 @@ sensor_count = 2
 per_window = "boxcar"
 
 # bokeh variable
-p_update = 20
+p_update = 80
 title_font_size = "25px"
 label_font_size = "20px"
 legend_font_size = "15px"
@@ -99,8 +101,10 @@ for i in range(0, sensor_count):
 
 source = ColumnDataSource(data)
 
+linestyles = ['solid','dashed','dotted','dotdash','dashdot']
+
 for i in range(0, sensor_count):
-    p0.line(x='time', y='temp_'+str(i), source=source, line_width=2, line_color=groups.black[i], legend_label="Sensor "+str(sensor_list[i]))
+    p0.line(x='time', y='temp_'+str(i), source=source, line_width=2, line_color=groups.black[i], line_dash=linestyles[i], legend_label="Sensor "+str(sensor_list[i]))
 
 p0.legend.location = "bottom_left"
 p0.legend.click_policy = "hide"
@@ -170,36 +174,17 @@ def update(t):
     source.stream(new_data, 500)
 
 
-def update_slider():
-    print('u')
-    #freq = str(freq_input.value).encode()
-    #sensor_count = str(sensor_count_input.value).encode()
-    #ii = (str(freq_input.value) + ';' +  str(sensor_count_input.value) + ';' + str(poly_coeff_input.value)).encode()
-    #print(ii.decode("utf-8"))
-    #print(str(y_axis_slider.value))
-
-
 def update_variables():
-    ii = [freq_input.value, sensor_count_input.value, poly_coeff_input.value, offset_input.value, fshift_input.value, fft_size_input.value, samp_rate_input.value, thres_input.value, min_dist_input.value]
+    print("sending")   
+    ii = [freq_input.value, sensor_count_input.value, poly_coeff_input.value, offset_input.value, fshift_input.value, fft_size_input.value, samp_rate_input.value, thres_input.value, min_dist_input.value]#
     socket_send.send_pyobj(ii)
+    # wait for reply
+    print("sent")
 
 
-freq_input.on_change('value', lambda attr, old, new: update_slider())
-sensor_count_input.on_change('value', lambda attr, old, new: update_slider())
-poly_coeff_input.on_change('value', lambda attr, old, new: update_slider())
-offset_input.on_change('value', lambda attr, old, new: update_slider())
-fshift_input.on_change('value', lambda attr, old, new: update_slider())
-fft_size_input.on_change('value', lambda attr, old, new: update_slider())
-samp_rate_input.on_change('value', lambda attr, old, new: update_slider())
-thres_input.on_change('value', lambda attr, old, new: update_slider())
-min_dist_input.on_change('value', lambda attr, old, new: update_slider())
+
 apply_button.on_click(update_variables)
-
-input_c = column(freq_input, sensor_count_input, poly_coeff_input, offset_input, fshift_input, fft_size_input, samp_rate_input, thres_input, min_dist_input, apply_button)
-
-curdoc().add_root(row(p1, p0, input_c))
+input_c = column(freq_input, sensor_count_input, poly_coeff_input, offset_input, fshift_input, fft_size_input, samp_rate_input, thres_input, min_dist_input, apply_button)#
+curdoc().add_root(row(p0, p1, input_c))#  
 curdoc().add_periodic_callback(update, p_update)
 curdoc().title = "test plot"
-
-#socket_temp.close()
-#socket_sig.close()

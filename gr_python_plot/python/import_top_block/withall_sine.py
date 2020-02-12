@@ -33,11 +33,11 @@ class top_block(gr.top_block):
         self.plot = plot = 100
         self.freq = freq = -2000
         self.fft_size = fft_size = 1024
-        self.polycoeff = [[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08]]
-        self.fshift = 24e6 * 5
-        self.offset = [130.0,200.0]
-        self.thres = 0.03
-        self.min_dist = 1
+        self.polycoeff = polycoeff = [[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08]]
+        self.fshift = fshift = 24e6 * 5
+        self.offset = offset = [130.0,200.0]
+        self.thres = thres = 0.03
+        self.min_dist = min_dist = 1
 
         ##################################################
         # Blocks

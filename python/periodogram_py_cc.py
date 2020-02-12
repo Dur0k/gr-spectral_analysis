@@ -50,7 +50,7 @@ class periodogram_py_cc(gr.sync_block):
         return self.fft_size
 
     def set_sample_rate(self, sample_rate):
-        self.fft_size = sample_rate
+        self.sample_rate = sample_rate
 
     def get_sample_rate(self):
         return self.sample_rate
@@ -61,7 +61,7 @@ class periodogram_py_cc(gr.sync_block):
         out1 = output_items[1]
         # <+signal processing here+>
         f, Pxx = signal.periodogram(in0, self.sample_rate, self.window, self.fft_size,return_onesided=False)#, return_onesided=False,scaling='spectrum'
-        
+        print(f.shape)
         out0[:] = f
         out1[:] = Pxx
         return len(output_items[0])

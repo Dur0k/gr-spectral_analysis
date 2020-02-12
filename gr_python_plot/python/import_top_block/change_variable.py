@@ -6,51 +6,73 @@ from time import sleep
 import numpy
 from withall_sine import top_block
 import zmq
+import threading
 
-
-
+class Change_Variables:
+    #https://www.pythonforthelab.com/blog/using-pyzmq-for-inter-process-communication-part-2/
+    def __init__(self, port, top_block):
+        self.tb = top_block
+        self.port = port
+        
+    def PullTask(self):
+        self.message = []
+        self.stop = False
+        context = zmq.Context()
+        socket = context.socket(zmq.PULL)
+        socket.connect("tcp://localhost:5555")
+        poller = zmq.Poller()
+        poller.register(socket, zmq.POLLIN)
+        while not self.stop:
+            socks = dict(poller.poll(-1))
+            if socks.get(socket) == zmq.POLLIN:
+                self.message = socket.recv_pyobj()
+                #self.tb.stop() 
+                #self.tb.wait()
+                self.tb.lock()
+                self.SetVariables(self.tb,self.message)
+                self.tb.unlock()
+                #self.tb.start()
+                
+    def SetVariables(self, tb, message):
+        self.tb = tb
+        self.message = message
+        print(self.message[5])
+        self.tb.set_freq(float(self.message[0]))
+        self.tb.set_sensor_count(int(self.message[1]))
+        self.tb.set_polycoeff(numpy.asarray(eval(self.message[2])))
+        self.tb.set_offset(numpy.asarray(eval(self.message[3])))
+        self.tb.set_fshift(numpy.asarray(float(eval(self.message[4]))))
+        self.tb.set_fft_size(float(self.message[5]))
+        self.tb.set_samp_rate(float(self.message[6]))
+        self.tb.set_thres(float(self.message[7]))
+        self.tb.set_min_dist(float(self.message[8]))
+            
+            
 def main(top_block_cls=top_block, options=None):
-    # ZMQ PULL
-    context = zmq.Context()
-    socket = context.socket(zmq.PULL)
-    socket.connect("tcp://localhost:5555")
-    poller = zmq.Poller()
-    poller.register(socket, zmq.POLLIN)
     tb = top_block_cls()
+    change_top = Change_Variables(5555, tb)
+    pull_thread = threading.Thread(target=change_top.PullTask)
+    pull_thread.start()
+    
     def sig_handler(sig=None, frame=None):
         tb.stop()
         tb.wait()
+        pull_thread.stop = True
         sys.exit(0)
 
     signal.signal(signal.SIGINT, sig_handler)
-    signal.signal(signal.SIGTERM, sig_handler)
-    while True:
-        socks = dict(poller.poll(10))
-        if socks.get(socket) == zmq.POLLIN:
-            message = socket.recv_pyobj()
-            tb.set_freq(float(message[0]))
-            tb.set_sensor_count(int(message[1]))
-            tb.set_polycoeff(numpy.asarray(eval(message[2])))
-            tb.set_offset(numpy.asarray(eval(message[3])))
-            tb.set_fshift(numpy.asarray(float(eval(message[4]))))
-            tb.set_fft_size(float(message[5]))
-            tb.set_samp_rate(float(message[6]))
-            tb.set_thres(float(message[7]))
-            tb.set_min_dist(float(message[8]))
-
-        tb.start()
-        sleep(0.005)
-        tb.stop()
-        tb.wait()
+    signal.signal(signal.SIGTERM, sig_handler)        
+    tb.run()
+    
+    #try:
+    #    input('Press Enter to quit: ')
+    #except EOFError:
+    #    pass
 
 
+
+if __name__ == '__main__':
     try:
-        input('Press Enter to quit: ')
-    except EOFError:
+        main()
+    except KeyboardInterrupt:
         pass
-
-
-
-
-
-main()
