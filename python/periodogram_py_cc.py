@@ -28,14 +28,14 @@ class periodogram_py_cc(gr.sync_block):
     """
     Block performs spectral analysis using Periodogram with different windows. A complex vector is defined and input. The block outputs two vectors with the frequency and the complex power of the spectrum.
     Args:
-        sample_rate: Incoming stream sample rate
+        samp_rate: Incoming stream sample rate
         fft_size: Number of FFT bins and input/output vector length
         window: the window used for Periodogram
     Reference:
     https://docs.scipy.org/doc/scipy-0.13.0/reference/generated/scipy.signal.periodogram.html
     """
-    def __init__(self, sample_rate, fft_size, window):
-        self.sample_rate = sample_rate
+    def __init__(self, samp_rate, fft_size, window):
+        self.samp_rate = samp_rate
         self.fft_size = fft_size
         self.window = window
         gr.sync_block.__init__(self,
@@ -49,19 +49,18 @@ class periodogram_py_cc(gr.sync_block):
     def get_fft_size(self):
         return self.fft_size
 
-    def set_sample_rate(self, sample_rate):
-        self.sample_rate = sample_rate
+    def set_samp_rate(self, samp_rate):
+        self.samp_rate = samp_rate
 
-    def get_sample_rate(self):
-        return self.sample_rate
+    def get_samp_rate(self):
+        return self.samp_rate
 
     def work(self, input_items, output_items):
         in0 = input_items[0]
         out0 = output_items[0]
         out1 = output_items[1]
         # <+signal processing here+>
-        f, Pxx = signal.periodogram(in0, self.sample_rate, self.window, self.fft_size,return_onesided=False)#, return_onesided=False,scaling='spectrum'
-        print(f.shape)
+        f, Pxx = signal.periodogram(in0, self.samp_rate, self.window, self.fft_size,return_onesided=False)#, return_onesided=False,scaling='spectrum'
         out0[:] = f
         out1[:] = Pxx
         return len(output_items[0])

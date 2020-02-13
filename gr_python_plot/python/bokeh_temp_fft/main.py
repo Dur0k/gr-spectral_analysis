@@ -71,9 +71,9 @@ poller_sig.register(socket_sig, zmq.POLLIN)
 ## Input controls
 #freq_slider = Slider(title="Frequency of sines", value=-3000, start=-3000, end=3000, step=100, callback_policy='mouseup')
 freq_input = TextInput(title="Frequency of sines", value=str(-3000))
-sensor_count_input = TextInput(title="Sensor Count", value=str(2))
-poly_coeff_input = TextInput(title="Polynomial Coefficients", value=str([[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08]]))
-offset_input = TextInput(title="Offset", value=str([130.0,200.0]))
+sensor_count_input = TextInput(title="Sensor Count", value=str(16))
+poly_coeff_input = TextInput(title="Polynomial Coefficients", value=str([[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08], [2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]))
+offset_input = TextInput(title="Offset", value=str([[130.0, 200.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]))
 fshift_input = TextInput(title="Frequency Shift", value='24e6 * 5')
 fft_size_input = TextInput(title="FFT Size", value=str(1024))
 samp_rate_input = TextInput(title="Sampling Rate", value=str(10000))
@@ -165,13 +165,17 @@ def update(t):
     for ii in range(0, sensor_count):
         new_data.update({'temp_'+str(ii): [numpy.mean(T[0, ii])]})
 
-    f, Pxx = _calc_spectrum(signal, fA)
-    new_fft_data = dict(
-        freq=f,
-        sp=Pxx,
-    )
-    source_fft.data = new_fft_data
-    source.stream(new_data, 500)
+    if len(signal) < 512:
+        source_fft.data = source_fft.data
+    else:
+        f, Pxx = _calc_spectrum(signal, fA)
+        print(len(Pxx))
+        new_fft_data = dict(
+            freq=f,
+            sp=Pxx,
+        )
+        source_fft.data = new_fft_data
+    source.stream(new_data, 2000)
 
 
 def update_variables():

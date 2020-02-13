@@ -21,5 +21,6 @@
 install(FILES
     spectral_analysis_peak_finding_cf.block.yml
     spectral_analysis_periodogram_py_cc.block.yml
-    spectral_analysis_temperature_calc_ff.block.yml DESTINATION share/gnuradio/grc/blocks
+    spectral_analysis_temperature_calc_ff.block.yml
+    spectral_analysis_hier_signal_source.block.yml DESTINATION share/gnuradio/grc/blocks
 )

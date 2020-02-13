@@ -37,7 +37,8 @@ GR_PYTHON_INSTALL(
     temperature_calc_ff.py
     peak_finding_cf.py
     periodogram_py_cc.py
-    temperature_calc_ff.py DESTINATION ${GR_PYTHON_DIR}/spectral_analysis
+    temperature_calc_ff.py
+    hier_signal_source.py DESTINATION ${GR_PYTHON_DIR}/spectral_analysis
 )
 
 ########################################################################

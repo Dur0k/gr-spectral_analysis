@@ -28,14 +28,14 @@ class top_block(gr.top_block):
         ##################################################
         # Variables
         ##################################################
-        self.sensor_count = sensor_count = 2
+        self.sensor_count = sensor_count = 16
         self.samp_rate = samp_rate = 1e6/100
         self.plot = plot = 100
         self.freq = freq = -2000
-        self.fft_size = fft_size = 1024
-        self.polycoeff = polycoeff = [[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08]]
+        self.fft_size = fft_size = 1024*8
+        self.polycoeff = polycoeff = [[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
         self.fshift = fshift = 24e6 * 5
-        self.offset = offset = [130.0,200.0]
+        self.offset = offset = [130.0, 200.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.thres = thres = 0.03
         self.min_dist = min_dist = 1
 
@@ -73,8 +73,9 @@ class top_block(gr.top_block):
         #return self.sensor_count
         return self.spectral_analysis_temperature_calc_ff_0.get_sensor_count()
 
-    def set_sensor_count(self, sensor_count):
-        self.sensor_count = sensor_count
+    # not working
+    #def set_sensor_count(self, sensor_count):
+    #    self.sensor_count = sensor_count
         #self.spectral_analysis_temperature_calc_ff_0.set_polycoeff(self.polycoeff)
         #self.spectral_analysis_peak_finding_cf_0.set_offset(self.offset)
 
@@ -98,13 +99,14 @@ class top_block(gr.top_block):
         
     def get_samp_rate(self):
         return self.samp_rate
-
-    def set_samp_rate(self, samp_rate):
-        self.samp_rate = samp_rate
-        self.blocks_throttle_0.set_sample_rate(self.samp_rate*10)
-        self.variable_qtgui_range_0.set_sampling_freq(self.samp_rate)
-        self.variable_qtgui_range_0_0.set_sampling_freq(self.samp_rate)
-        self.spectral_analysis_periodogram_py_cc_0.set_sample_rate(self.samp_rate)
+    
+    # not working
+    #def set_samp_rate(self, samp_rate):
+    #    self.samp_rate = samp_rate
+    #    self.blocks_throttle_0.set_sample_rate(self.samp_rate*10)
+    #    self.variable_qtgui_range_0.set_sampling_freq(self.samp_rate)
+    #    self.variable_qtgui_range_0_0.set_sampling_freq(self.samp_rate)
+    #    self.spectral_analysis_periodogram_py_cc_0.set_sample_rate(self.samp_rate)
 
     def get_fshift(self):
         return self.fshift
