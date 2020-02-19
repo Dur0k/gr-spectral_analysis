@@ -26,24 +26,24 @@ class Change_Variables:
             socks = dict(poller.poll(-1))
             if socks.get(socket) == zmq.POLLIN:
                 self.message = socket.recv_pyobj()
-                #self.tb.stop() 
-                #self.tb.wait()
-                self.tb.lock()
+                self.tb.stop() 
+                self.tb.wait()
+                #self.tb.lock()
                 self.SetVariables(self.tb,self.message)
-                self.tb.unlock()
-                #self.tb.start()
+                #self.tb.unlock()
+                self.tb.start()
                 
     def SetVariables(self, tb, message):
         self.tb = tb
         self.message = message
         print(self.message[0])
         self.tb.set_freq(float(self.message[0]))
-        #self.tb.set_sensor_count(int(self.message[1]))
+        self.tb.set_sensor_count(int(self.message[1]))
         self.tb.set_polycoeff(numpy.asarray(eval(self.message[2])))
         self.tb.set_offset(numpy.asarray(eval(self.message[3])))
         self.tb.set_fshift(numpy.asarray(float(eval(self.message[4]))))
-        self.tb.set_fft_size(float(self.message[5]))
-        #self.tb.set_samp_rate(float(self.message[6]))
+        self.tb.set_fft_size(int(self.message[5]))
+        self.tb.set_samp_rate(float(self.message[6]))
         self.tb.set_thres(float(self.message[7]))
         self.tb.set_min_dist(float(self.message[8]))
             

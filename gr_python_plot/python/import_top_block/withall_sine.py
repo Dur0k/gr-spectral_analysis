@@ -47,10 +47,10 @@ class top_block(gr.top_block):
         self.variable_qtgui_range_0_0 = analog.sig_source_c(samp_rate, analog.GR_SIN_WAVE, freq+300, 1, 0, 0)
         self.variable_qtgui_range_0 = analog.sig_source_c(samp_rate, analog.GR_SIN_WAVE, freq, 1, 0, 0)
         self.spectral_analysis_temperature_calc_ff_0 = spectral_analysis.temperature_calc_ff(sensor_count, self.polycoeff, self.fshift, self.offset)
-        self.spectral_analysis_periodogram_py_cc_0 = spectral_analysis.periodogram_py_cc(samp_rate, fft_size, 'boxcar')
-        self.spectral_analysis_peak_finding_cf_0 = spectral_analysis.peak_finding_cf(fft_size, sensor_count, self.thres, self.min_dist)
-        self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate*10,True)
-        self.blocks_stream_to_vector_0 = blocks.stream_to_vector(gr.sizeof_gr_complex*1, fft_size)
+        self.spectral_analysis_periodogram_py_cc_0 = spectral_analysis.periodogram_py_cc(samp_rate, self.fft_size, 'boxcar')
+        self.spectral_analysis_peak_finding_cf_0 = spectral_analysis.peak_finding_cf(self.fft_size, sensor_count, self.thres, self.min_dist)
+        self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, self.samp_rate*10,True)
+        self.blocks_stream_to_vector_0 = blocks.stream_to_vector(gr.sizeof_gr_complex*1, self.fft_size)
         self.blocks_add_xx_0 = blocks.add_vcc(1)
 
 
@@ -74,8 +74,8 @@ class top_block(gr.top_block):
         return self.spectral_analysis_temperature_calc_ff_0.get_sensor_count()
 
     # not working
-    #def set_sensor_count(self, sensor_count):
-    #    self.sensor_count = sensor_count
+    def set_sensor_count(self, sensor_count):
+        self.sensor_count = sensor_count
         #self.spectral_analysis_temperature_calc_ff_0.set_polycoeff(self.polycoeff)
         #self.spectral_analysis_peak_finding_cf_0.set_offset(self.offset)
 
@@ -95,14 +95,29 @@ class top_block(gr.top_block):
 
     def set_fft_size(self, fft_size):
         self.fft_size = fft_size
-        self.spectral_analysis_peak_finding_cf_0.set_fft_size(self.fft_size)
+        self.disconnect(self.blocks_stream_to_vector_0)
+        self.disconnect(self.spectral_analysis_periodogram_py_cc_0)
+        self.disconnect(self.spectral_analysis_peak_finding_cf_0)
+        del self.blocks_stream_to_vector_0
+        del self.spectral_analysis_periodogram_py_cc_0
+        del self.spectral_analysis_peak_finding_cf_0
+        #print(type(self.fft_size))
+        self.spectral_analysis_periodogram_py_cc_0 = spectral_analysis.periodogram_py_cc(self.samp_rate, self.fft_size, 'boxcar')#self.fft_size
+        self.spectral_analysis_peak_finding_cf_0 = spectral_analysis.peak_finding_cf(self.fft_size, self.sensor_count, self.thres, self.min_dist)
+        self.blocks_stream_to_vector_0 = blocks.stream_to_vector(gr.sizeof_gr_complex*1, self.fft_size)
+        self.connect((self.blocks_stream_to_vector_0, 0), (self.spectral_analysis_periodogram_py_cc_0, 0))
+        self.connect((self.blocks_throttle_0, 0), (self.blocks_stream_to_vector_0, 0))
+        self.connect((self.spectral_analysis_peak_finding_cf_0, 0), (self.spectral_analysis_temperature_calc_ff_0, 0))
+        self.connect((self.spectral_analysis_periodogram_py_cc_0, 0), (self.spectral_analysis_peak_finding_cf_0, 0))
+        self.connect((self.spectral_analysis_periodogram_py_cc_0, 1), (self.spectral_analysis_peak_finding_cf_0, 1))
+        
         
     def get_samp_rate(self):
         return self.samp_rate
     
     # not working
-    #def set_samp_rate(self, samp_rate):
-    #    self.samp_rate = samp_rate
+    def set_samp_rate(self, samp_rate):
+        self.samp_rate = samp_rate
     #    self.blocks_throttle_0.set_sample_rate(self.samp_rate*10)
     #    self.variable_qtgui_range_0.set_sampling_freq(self.samp_rate)
     #    self.variable_qtgui_range_0_0.set_sampling_freq(self.samp_rate)
