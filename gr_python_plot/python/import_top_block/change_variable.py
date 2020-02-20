@@ -46,7 +46,7 @@ class Change_Variables:
         self.tb.set_offset(numpy.asarray(eval(self.message[3])))
         self.tb.set_sensor_count(int(self.message[1]))
         self.tb.set_fft_size(int(self.message[5]))
-            
+
 def main(top_block_cls=top_block, options=None):
     tb = top_block_cls()
     change_top = Change_Variables(5555, tb)

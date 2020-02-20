@@ -42,7 +42,7 @@ class top_block(gr.top_block):
         ##################################################
         # Blocks
         ##################################################
-        self.zeromq_push_sink_0_0_0 = zeromq.push_sink(gr.sizeof_gr_complex, 1, 'tcp://*:5589', 10, False, -1)
+        self.zeromq_push_sink_0_0_0 = zeromq.push_sink(gr.sizeof_gr_complex, self.fft_size, 'tcp://*:5589', 10, False, -1)
         self.zeromq_push_sink_0_0 = zeromq.push_sink(gr.sizeof_float, self.sensor_count, 'tcp://*:5588', 10, False, -1)
         self.variable_qtgui_range_0_0 = analog.sig_source_c(samp_rate, analog.GR_SIN_WAVE, self.freq+300, 1, 0, 0)
         self.variable_qtgui_range_0 = analog.sig_source_c(samp_rate, analog.GR_SIN_WAVE, self.freq, 1, 0, 0)
@@ -62,7 +62,7 @@ class top_block(gr.top_block):
         self.connect((self.blocks_add_xx_0, 0), (self.blocks_throttle_0, 0))
         self.connect((self.blocks_stream_to_vector_0, 0), (self.spectral_analysis_periodogram_py_cc_0, 0))
         self.connect((self.blocks_throttle_0, 0), (self.blocks_stream_to_vector_0, 0))
-        self.connect((self.blocks_throttle_0, 0), (self.zeromq_push_sink_0_0_0, 0))
+        self.connect((self.blocks_stream_to_vector_0, 0), (self.zeromq_push_sink_0_0_0, 0))
         self.connect((self.spectral_analysis_peak_finding_cf_0, 0), (self.spectral_analysis_temperature_calc_ff_0, 0))
         self.connect((self.spectral_analysis_periodogram_py_cc_0, 0), (self.spectral_analysis_peak_finding_cf_0, 0))
         self.connect((self.spectral_analysis_periodogram_py_cc_0, 1), (self.spectral_analysis_peak_finding_cf_0, 1))
