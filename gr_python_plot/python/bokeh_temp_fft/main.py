@@ -7,9 +7,10 @@ from scipy import signal as sg
 from bokeh.driving import count
 from bokeh.plotting import figure, curdoc
 from bokeh.models import ColumnDataSource, RangeTool, Slider, Button
-from bokeh.layouts import gridplot, column, row
+from bokeh.layouts import gridplot, column, row, layout
 from bokeh.colors import groups
 from bokeh.models.widgets import RangeSlider, TextInput
+from bokeh.layouts import gridplot
 
 # zmq variables
 port_temp = 5588
@@ -24,7 +25,7 @@ sensor_count = 2
 per_window = "boxcar"
 
 # bokeh variable
-p_update = 35#80
+p_update = 80#80
 title_font_size = "25px"
 label_font_size = "20px"
 legend_font_size = "15px"
@@ -37,16 +38,16 @@ p0_title = "Sensor Temperature"
 p0_ylabel = "Temperature [°C]"
 p0_xlabel = "Time"
 p0_y_range = (0,40)
-p0_plot_height = 800
-p0_plot_width = 930
+p0_plot_height = 950
+p0_plot_width = 1180#930
 p0_tools = "xpan,box_zoom,save,reset"
 
 ## Spectrum Plot
 p1_y_range = (10**-10, 1)
 p1_x_range = (-2500, 2500)
 p1_x_bounds = (-4000,4000)
-p1_plot_height = 800
-p1_plot_width = 930
+p1_plot_height = 950#800
+p1_plot_width = 1180#930
 p1_xlabel = "Frequency [Hz]"
 p1_ylabel = "Spectrum"
 p1_title = "Periodogram of baseband signal"
@@ -104,7 +105,7 @@ source = ColumnDataSource(data)
 linestyles = ['solid','dashed','dotted','dotdash','dashdot']
 
 for i in range(0, sensor_count):
-    p0.line(x='time', y='temp_'+str(i), source=source, line_width=2, line_color=groups.black[i], line_dash=linestyles[i], legend_label="Sensor "+str(sensor_list[i]))
+    p0.line(x='time', y='temp_'+str(i), source=source, line_width=2, line_color='black', line_dash=linestyles[i], legend_label="Sensor "+str(sensor_list[i]))#line_color=groups.black[8],
 
 p0.legend.location = "bottom_left"
 p0.legend.click_policy = "hide"
@@ -168,7 +169,7 @@ def update(t):
     if len(signal) < 512:
         source_fft.data = source_fft.data
     else:
-        f, Pxx = _calc_spectrum(signal[0:4096], fA)
+        f, Pxx = _calc_spectrum(signal[0:2048], fA)
         print(len(Pxx))
         new_fft_data = dict(
             freq=f,
@@ -188,7 +189,12 @@ def update_variables():
 
 
 apply_button.on_click(update_variables)
-input_c = column(freq_input, sensor_count_input, poly_coeff_input, offset_input, fshift_input, fft_size_input, samp_rate_input, thres_input, min_dist_input, apply_button)#
-curdoc().add_root(row(p0, p1, input_c))#
+input_1 = column(freq_input, sensor_count_input, fft_size_input)#
+input_2 = column(poly_coeff_input, offset_input, fshift_input)
+input_3 = column(samp_rate_input, thres_input, min_dist_input,apply_button)
+input_g = layout([[p0, p1]], sizing_mode='stretch_width')
+#input_c = layout([[None, freq_input], [input_1, input_2, input_3]])
+input_c = gridplot([[p0, p1], [row(input_1, input_2, input_3), None]])
 curdoc().add_periodic_callback(update, p_update)
+curdoc().add_root(input_c)#
 curdoc().title = "test plot"
