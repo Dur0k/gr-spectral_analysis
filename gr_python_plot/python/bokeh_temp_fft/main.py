@@ -1,17 +1,20 @@
 import zmq
 import time
 import numpy
+import threading
+
 from scipy import signal as sg
 from bokeh.driving import count
 from bokeh.plotting import figure, curdoc
-from bokeh.models import ColumnDataSource, RangeTool
+from bokeh.models import ColumnDataSource, RangeTool, Slider, Button
 from bokeh.layouts import gridplot, column, row
 from bokeh.colors import groups
-#from bokeh.models.widgets import RangeSlider
+from bokeh.models.widgets import RangeSlider, TextInput
 
 # zmq variables
 port_temp = 5588
 port_sig = 5589
+port_send = 5555
 
 # gr variables
 fA = 1e6/100
@@ -21,7 +24,7 @@ sensor_count = 2
 per_window = "boxcar"
 
 # bokeh variable
-p_update = 20
+p_update = 35#80
 title_font_size = "25px"
 label_font_size = "20px"
 legend_font_size = "15px"
@@ -49,22 +52,36 @@ p1_ylabel = "Spectrum"
 p1_title = "Periodogram of baseband signal"
 p1_tools = "xpan,xbox_zoom,save,reset"
 
-
 # zmq stuff
 context = zmq.Context()
 socket_temp = context.socket(zmq.PULL)
 socket_temp.connect("tcp://localhost:"+str(port_temp))
 socket_sig = context.socket(zmq.PULL)
 socket_sig.connect("tcp://localhost:"+str(port_sig))
+socket_send = context.socket(zmq.PUSH)
+socket_send.bind("tcp://*:"+str(port_send))
 poller_temp = zmq.Poller()
 poller_sig = zmq.Poller()
 poller_temp.register(socket_temp, zmq.POLLIN)
 poller_sig.register(socket_sig, zmq.POLLIN)
- 
+
 
 # bokeh stuff
 
-## Temperature Plot# y_range=(0, 40), tools="xpan,xwheel_zoom,xbox_zoom,reset", 
+## Input controls
+#freq_slider = Slider(title="Frequency of sines", value=-3000, start=-3000, end=3000, step=100, callback_policy='mouseup')
+freq_input = TextInput(title="Frequency of sines", value=str(-3000))
+sensor_count_input = TextInput(title="Sensor Count", value=str(16))
+poly_coeff_input = TextInput(title="Polynomial Coefficients", value=str([[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08], [2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]))
+offset_input = TextInput(title="Offset", value=str([[130.0, 200.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]))
+fshift_input = TextInput(title="Frequency Shift", value='24e6 * 5')
+fft_size_input = TextInput(title="FFT Size", value=str(1024))
+samp_rate_input = TextInput(title="Sampling Rate", value=str(10000))
+thres_input = TextInput(title="Peak Threshold", value=str(0.03))
+min_dist_input = TextInput(title="Min Peak Distance", value=str(1))
+apply_button = Button(label="Apply Settings", button_type="success")
+
+## Temperature Plot# y_range=(0, 40), tools="xpan,xwheel_zoom,xbox_zoom,reset",
 p0 = figure(title=p0_title, y_range=p0_y_range, plot_height=p0_plot_height, plot_width=p0_plot_width, tools=p0_tools, y_axis_location="left")
 p0.yaxis.axis_label = p0_ylabel
 p0.xaxis.axis_label = p0_xlabel
@@ -84,8 +101,10 @@ for i in range(0, sensor_count):
 
 source = ColumnDataSource(data)
 
+linestyles = ['solid','dashed','dotted','dotdash','dashdot']
+
 for i in range(0, sensor_count):
-    p0.line(x='time', y='temp_'+str(i), source=source, line_width=2, line_color=groups.black[i], legend_label="Sensor "+str(sensor_list[i]))
+    p0.line(x='time', y='temp_'+str(i), source=source, line_width=2, line_color=groups.black[i], line_dash=linestyles[i], legend_label="Sensor "+str(sensor_list[i]))
 
 p0.legend.location = "bottom_left"
 p0.legend.click_policy = "hide"
@@ -146,23 +165,30 @@ def update(t):
     for ii in range(0, sensor_count):
         new_data.update({'temp_'+str(ii): [numpy.mean(T[0, ii])]})
 
-    f, Pxx = _calc_spectrum(signal, fA)
-    new_fft_data = dict(
-        freq=f,
-        sp=Pxx,
-    )
-    source_fft.data = new_fft_data
-    source.stream(new_data, 500)
-    #source_fft.stream(new_fft_data, len(Pxx))
+    if len(signal) < 512:
+        source_fft.data = source_fft.data
+    else:
+        f, Pxx = _calc_spectrum(signal[0:4096], fA)
+        print(len(Pxx))
+        new_fft_data = dict(
+            freq=f,
+            sp=Pxx,
+        )
+        source_fft.data = new_fft_data
+    source.stream(new_data, 2000)
 
 
-###y_axis_slider = RangeSlider(start=-20, end=50, value=(0,40), step=1, callback_policy='mouseup')
-###y_axis_slider.on_change('value',lambda attr, old, new: update())
+def update_variables():
+    print("sending")
+    ii = [freq_input.value, sensor_count_input.value, poly_coeff_input.value, offset_input.value, fshift_input.value, fft_size_input.value, samp_rate_input.value, thres_input.value, min_dist_input.value]#
+    socket_send.send_pyobj(ii)
+    # wait for reply
+    print("sent")
 
-curdoc().add_root(row(p1, p0))#
+
+
+apply_button.on_click(update_variables)
+input_c = column(freq_input, sensor_count_input, poly_coeff_input, offset_input, fshift_input, fft_size_input, samp_rate_input, thres_input, min_dist_input, apply_button)#
+curdoc().add_root(row(p0, p1, input_c))#
 curdoc().add_periodic_callback(update, p_update)
 curdoc().title = "test plot"
-
-#socket_temp.close()
-#socket_sig.close()
-

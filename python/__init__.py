@@ -35,4 +35,5 @@ except ImportError:
 from .peak_finding_cf import peak_finding_cf
 from .periodogram_py_cc import periodogram_py_cc
 from .temperature_calc_ff import temperature_calc_ff
+from .hier_signal_source import hier_signal_source
 #

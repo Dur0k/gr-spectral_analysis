@@ -1,0 +1,1000 @@
+options:
+  parameters:
+    author: durok
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: hb
+    hier_block_src_path: '.:'
+    id: hier_signal_source
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: hier_signal_source
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '32000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 12]
+    rotation: 0
+    state: enabled
+- name: amp_0
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [873, 174]
+    rotation: 0
+    state: true
+- name: amp_1
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [872, 254]
+    rotation: 0
+    state: true
+- name: amp_10
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1102, 178]
+    rotation: 0
+    state: true
+- name: amp_11
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1092, 255]
+    rotation: 0
+    state: true
+- name: amp_12
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1101, 339]
+    rotation: 0
+    state: true
+- name: amp_13
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1103, 430]
+    rotation: 0
+    state: true
+- name: amp_14
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1096, 507]
+    rotation: 0
+    state: true
+- name: amp_15
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1100, 593]
+    rotation: 0
+    state: true
+- name: amp_2
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [872, 334]
+    rotation: 0
+    state: true
+- name: amp_3
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [872, 415]
+    rotation: 0
+    state: true
+- name: amp_4
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [869, 497]
+    rotation: 0
+    state: true
+- name: amp_5
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [869, 575]
+    rotation: 0
+    state: true
+- name: amp_6
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [867, 655]
+    rotation: 0
+    state: true
+- name: amp_7
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [865, 736]
+    rotation: 0
+    state: true
+- name: amp_8
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [860, 816]
+    rotation: 0
+    state: true
+- name: amp_9
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: amp
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1111, 94]
+    rotation: 0
+    state: true
+- name: blocks_add_xx_0
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '16'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [711, 872]
+    rotation: 0
+    state: true
+- name: freq_0
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 174]
+    rotation: 0
+    state: true
+- name: freq_1
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [743, 254]
+    rotation: 0
+    state: true
+- name: freq_10
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [974, 177]
+    rotation: 0
+    state: true
+- name: freq_11
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [964, 254]
+    rotation: 0
+    state: true
+- name: freq_12
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [973, 338]
+    rotation: 0
+    state: true
+- name: freq_13
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [975, 429]
+    rotation: 0
+    state: true
+- name: freq_14
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [968, 506]
+    rotation: 0
+    state: true
+- name: freq_15
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [972, 592]
+    rotation: 0
+    state: true
+- name: freq_2
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 333]
+    rotation: 0
+    state: true
+- name: freq_3
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 414]
+    rotation: 0
+    state: true
+- name: freq_4
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [741, 496]
+    rotation: 0
+    state: true
+- name: freq_5
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [741, 574]
+    rotation: 0
+    state: true
+- name: freq_6
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [739, 654]
+    rotation: 0
+    state: true
+- name: freq_7
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [737, 735]
+    rotation: 0
+    state: true
+- name: freq_8
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [732, 815]
+    rotation: 0
+    state: true
+- name: freq_9
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: freq
+    short_id: ''
+    type: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [983, 93]
+    rotation: 0
+    state: true
+- name: pad_sink_0
+  id: pad_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: out
+    num_streams: '1'
+    optional: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [899, 1108]
+    rotation: 0
+    state: true
+- name: variable_qtgui_range_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_2
+    comment: ''
+    freq: freq_2
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [167, 438]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_0_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_3
+    comment: ''
+    freq: freq_3
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [168, 560]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_0_0_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_1
+    comment: ''
+    freq: freq_1
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [168, 315]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_0_0_0_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_5
+    comment: ''
+    freq: freq_5
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [167, 804]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_0_0_0_0_1
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_13
+    comment: ''
+    freq: freq_13
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [167, 1780]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_0_0_0_0_1_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_9
+    comment: ''
+    freq: freq_9
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [167, 1292]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_0_0_1
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_7
+    comment: ''
+    freq: freq_7
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [167, 1048]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_0_0_1_1
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_15
+    comment: ''
+    freq: freq_15
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [172, 2033]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_0_0_1_1_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_11
+    comment: ''
+    freq: freq_11
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [167, 1536]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_0_1
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_0
+    comment: ''
+    freq: freq_0
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [167, 194]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_0_1_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_4
+    comment: ''
+    freq: freq_4
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [167, 682]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_0_1_0_1
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_12
+    comment: ''
+    freq: freq_12
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [166, 1659]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_0_1_0_1_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_8
+    comment: ''
+    freq: freq_8
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [167, 1170]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_0_2
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_6
+    comment: ''
+    freq: freq_6
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [167, 927]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_0_2_1
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_14
+    comment: ''
+    freq: freq_14
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [168, 1908]
+    rotation: 0
+    state: enabled
+- name: variable_qtgui_range_0_2_1_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: amp_10
+    comment: ''
+    freq: freq_10
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [167, 1414]
+    rotation: 0
+    state: enabled
+
+connections:
+- [blocks_add_xx_0, '0', pad_sink_0, '0']
+- [variable_qtgui_range_0, '0', blocks_add_xx_0, '2']
+- [variable_qtgui_range_0_0, '0', blocks_add_xx_0, '3']
+- [variable_qtgui_range_0_0_0, '0', blocks_add_xx_0, '1']
+- [variable_qtgui_range_0_0_0_0, '0', blocks_add_xx_0, '5']
+- [variable_qtgui_range_0_0_0_0_1, '0', blocks_add_xx_0, '13']
+- [variable_qtgui_range_0_0_0_0_1_0, '0', blocks_add_xx_0, '9']
+- [variable_qtgui_range_0_0_1, '0', blocks_add_xx_0, '7']
+- [variable_qtgui_range_0_0_1_1, '0', blocks_add_xx_0, '15']
+- [variable_qtgui_range_0_0_1_1_0, '0', blocks_add_xx_0, '11']
+- [variable_qtgui_range_0_1, '0', blocks_add_xx_0, '0']
+- [variable_qtgui_range_0_1_0, '0', blocks_add_xx_0, '4']
+- [variable_qtgui_range_0_1_0_1, '0', blocks_add_xx_0, '12']
+- [variable_qtgui_range_0_1_0_1_0, '0', blocks_add_xx_0, '8']
+- [variable_qtgui_range_0_2, '0', blocks_add_xx_0, '6']
+- [variable_qtgui_range_0_2_1, '0', blocks_add_xx_0, '14']
+- [variable_qtgui_range_0_2_1_0, '0', blocks_add_xx_0, '10']
+
+metadata:
+  file_format: 1

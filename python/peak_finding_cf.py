@@ -73,6 +73,30 @@ class peak_finding_cf(gr.sync_block):
         f_per = f_cyc[peaks]
         return f_per
 
+    def set_sensor_count(self, sensor_count):
+        self.sensor_count = sensor_count
+
+    def get_sensor_count(self):
+        return self.sensor_count
+
+    def set_fft_size(self, fft_size):
+        self.fft_size = fft_size
+
+    def get_fft_size(self):
+        return self.fft_size
+        
+    def set_thres(self, thres):
+        self.thres = thres
+
+    def get_thres(self):
+        return self.thres
+
+    def set_min_dist(self, min_dist):
+        self.min_dist = min_dist
+
+    def get_min_dist(self):
+        return self.min_dist
+        
     def work(self, input_items, output_items):
         in0 = input_items[0]
         in1 = input_items[1]
