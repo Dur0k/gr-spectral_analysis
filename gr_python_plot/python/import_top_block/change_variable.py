@@ -4,7 +4,7 @@ import sys
 import signal
 from time import sleep
 import numpy
-from withall_sine import top_block
+from withall_sine import top_block #aufbau
 import zmq
 import threading
 
