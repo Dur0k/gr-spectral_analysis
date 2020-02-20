@@ -24,7 +24,7 @@ sensor_count = 2
 per_window = "boxcar"
 
 # bokeh variable
-p_update = 80
+p_update = 35#80
 title_font_size = "25px"
 label_font_size = "20px"
 legend_font_size = "15px"
@@ -64,7 +64,7 @@ poller_temp = zmq.Poller()
 poller_sig = zmq.Poller()
 poller_temp.register(socket_temp, zmq.POLLIN)
 poller_sig.register(socket_sig, zmq.POLLIN)
- 
+
 
 # bokeh stuff
 
@@ -81,7 +81,7 @@ thres_input = TextInput(title="Peak Threshold", value=str(0.03))
 min_dist_input = TextInput(title="Min Peak Distance", value=str(1))
 apply_button = Button(label="Apply Settings", button_type="success")
 
-## Temperature Plot# y_range=(0, 40), tools="xpan,xwheel_zoom,xbox_zoom,reset", 
+## Temperature Plot# y_range=(0, 40), tools="xpan,xwheel_zoom,xbox_zoom,reset",
 p0 = figure(title=p0_title, y_range=p0_y_range, plot_height=p0_plot_height, plot_width=p0_plot_width, tools=p0_tools, y_axis_location="left")
 p0.yaxis.axis_label = p0_ylabel
 p0.xaxis.axis_label = p0_xlabel
@@ -168,7 +168,7 @@ def update(t):
     if len(signal) < 512:
         source_fft.data = source_fft.data
     else:
-        f, Pxx = _calc_spectrum(signal, fA)
+        f, Pxx = _calc_spectrum(signal[0:4096], fA)
         print(len(Pxx))
         new_fft_data = dict(
             freq=f,
@@ -179,7 +179,7 @@ def update(t):
 
 
 def update_variables():
-    print("sending")   
+    print("sending")
     ii = [freq_input.value, sensor_count_input.value, poly_coeff_input.value, offset_input.value, fshift_input.value, fft_size_input.value, samp_rate_input.value, thres_input.value, min_dist_input.value]#
     socket_send.send_pyobj(ii)
     # wait for reply
@@ -189,6 +189,6 @@ def update_variables():
 
 apply_button.on_click(update_variables)
 input_c = column(freq_input, sensor_count_input, poly_coeff_input, offset_input, fshift_input, fft_size_input, samp_rate_input, thres_input, min_dist_input, apply_button)#
-curdoc().add_root(row(p0, p1, input_c))#  
+curdoc().add_root(row(p0, p1, input_c))#
 curdoc().add_periodic_callback(update, p_update)
 curdoc().title = "test plot"

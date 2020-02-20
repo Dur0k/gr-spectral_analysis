@@ -44,8 +44,9 @@ class top_block(gr.top_block):
         ##################################################
         self.zeromq_push_sink_0_0_0 = zeromq.push_sink(gr.sizeof_gr_complex, 1, 'tcp://*:5589', 10, False, -1)
         self.zeromq_push_sink_0_0 = zeromq.push_sink(gr.sizeof_float, self.sensor_count, 'tcp://*:5588', 10, False, -1)
-        self.variable_qtgui_range_0_0 = analog.sig_source_c(samp_rate, analog.GR_SIN_WAVE, freq+300, 1, 0, 0)
-        self.variable_qtgui_range_0 = analog.sig_source_c(samp_rate, analog.GR_SIN_WAVE, freq, 1, 0, 0)
+        self.variable_qtgui_range_0_0 = analog.sig_source_c(samp_rate, analog.GR_SIN_WAVE, self.freq+300, 1, 0, 0)
+        self.variable_qtgui_range_0 = analog.sig_source_c(samp_rate, analog.GR_SIN_WAVE, self.freq, 1, 0, 0)
+        #self.variable_qtgui_range_1 = analog.sig_source_c(samp_rate, analog.GR_SIN_WAVE, self.freq-200, 1, 0, 0)
         self.spectral_analysis_temperature_calc_ff_0 = spectral_analysis.temperature_calc_ff(sensor_count, self.polycoeff, self.fshift, self.offset)
         self.spectral_analysis_periodogram_py_cc_0 = spectral_analysis.periodogram_py_cc(samp_rate, self.fft_size, 'boxcar')
         self.spectral_analysis_peak_finding_cf_0 = spectral_analysis.peak_finding_cf(self.fft_size, sensor_count, self.thres, self.min_dist)
@@ -68,6 +69,7 @@ class top_block(gr.top_block):
         self.connect((self.spectral_analysis_temperature_calc_ff_0, 0), (self.zeromq_push_sink_0_0, 0))
         self.connect((self.variable_qtgui_range_0, 0), (self.blocks_add_xx_0, 0))
         self.connect((self.variable_qtgui_range_0_0, 0), (self.blocks_add_xx_0, 1))
+        #self.connect((self.variable_qtgui_range_1, 0), (self.blocks_add_xx_0, 2))
 
     def get_sensor_count(self):
         #return self.sensor_count
@@ -110,12 +112,11 @@ class top_block(gr.top_block):
         self.connect((self.spectral_analysis_peak_finding_cf_0, 0), (self.spectral_analysis_temperature_calc_ff_0, 0))
         self.connect((self.spectral_analysis_periodogram_py_cc_0, 0), (self.spectral_analysis_peak_finding_cf_0, 0))
         self.connect((self.spectral_analysis_periodogram_py_cc_0, 1), (self.spectral_analysis_peak_finding_cf_0, 1))
-        
-        
+
+
     def get_samp_rate(self):
         return self.samp_rate
-    
-    # not working
+
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
     #    self.blocks_throttle_0.set_sample_rate(self.samp_rate*10)
@@ -157,6 +158,7 @@ class top_block(gr.top_block):
         self.freq = freq
         self.variable_qtgui_range_0.set_frequency(self.freq)
         self.variable_qtgui_range_0_0.set_frequency(self.freq+300)
+        #self.variable_qtgui_range_1.set_frequency(self.freq-300)
 
     def get_fshift(self):
         return self.fshift
@@ -165,7 +167,7 @@ class top_block(gr.top_block):
         self.fshift = fshift
         self.spectral_analysis_temperature_calc_ff_0.set_fshift(self.fshift)
 
-   
+
 def main(top_block_cls=top_block, options=None):
     tb = top_block_cls()
 
