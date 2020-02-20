@@ -1,6 +1,6 @@
 # gr-spectral_analysis
 
-## GNURadio Companion Project :  
+## GNURadio Companion Project  
 USRP &rarr; Freq Xlating FIR Filter &rarr; Periodogram &rarr; Peak Finding &rarr; Temperature Calculation for analog quartz crystal sensors
 
 ## Data Plots via Bokeh
