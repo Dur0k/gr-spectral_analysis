@@ -21,7 +21,7 @@ from gnuradio import zeromq
 from gnuradio import uhd
 from gnuradio import filter
 from gnuradio.filter import firdes
-#import spectral_analysis
+import spectral_analysis
 
 class top_block(gr.top_block):
 
