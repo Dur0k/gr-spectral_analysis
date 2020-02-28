@@ -19,13 +19,13 @@ port_send = 5555
 
 # gr variables
 fA = 1e6/100
-sensor_count = 2
+sensor_count = 3
 
 # periodogram variable
 per_window = "boxcar"
 
 # bokeh variable
-p_update = 80#80
+p_update = 60#80
 title_font_size = "25px"
 label_font_size = "20px"
 legend_font_size = "15px"
@@ -43,7 +43,7 @@ p0_plot_width = 1180#930
 p0_tools = "xpan,box_zoom,save,reset"
 
 ## Spectrum Plot
-p1_y_range = (10**-10, 1)
+p1_y_range = (10**-13, 1)
 p1_x_range = (-2500, 2500)
 p1_x_bounds = (-4000,4000)
 p1_plot_height = 950#800
@@ -141,7 +141,7 @@ def _update_data():
     if socks_sig.get(socket_sig) == zmq.POLLIN:
         message_sig = socket_sig.recv()
     T = numpy.frombuffer(message_temp, dtype=numpy.float32())
-    T = numpy.reshape(T, (len(T)//sensor_count, sensor_count))
+    T = numpy.reshape(T, (len(T)//16, 16))
     signal = numpy.frombuffer(message_sig, dtype=numpy.complex64())
     return T, signal
 
@@ -168,13 +168,16 @@ def update(t):
     )
     T = _replaceNaN(T)
     for ii in range(0, sensor_count):
-        new_data.update({'temp_'+str(ii): [numpy.mean(T[0, ii])]})
+        if T[:,ii].any() != 0:
+            new_data.update({'temp_'+str(ii): [T[:, ii]]})
+        else:
+            new_data.update({'temp_'+str(ii): [numpy.mean(T[:, ii])]})
+        
 
     if len(signal) < 512:
         source_fft.data = source_fft.data
     else:
         f, Pxx = _calc_spectrum(signal[0:2048], fA)
-        print(len(Pxx))
         new_fft_data = dict(
             freq=f,
             sp=Pxx,
