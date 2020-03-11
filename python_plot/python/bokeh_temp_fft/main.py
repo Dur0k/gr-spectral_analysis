@@ -56,6 +56,7 @@ p1_tools = "xpan,xbox_zoom,save,reset"
 # zmq stuff
 context = zmq.Context()
 socket_temp = context.socket(zmq.PULL)
+socket_temp.set_hwm(1)
 socket_temp.connect("tcp://localhost:"+str(port_temp))
 socket_sig = context.socket(zmq.PULL)
 socket_sig.connect("tcp://localhost:"+str(port_sig))
@@ -134,10 +135,10 @@ p1.line(x='freq', y='sp', source=source_fft, line_width=2, line_color='black')
 
 # functions
 def _update_data():
-    socks_temp = dict(poller_temp.poll())
+    socks_temp = dict(poller_temp.poll(0))
     if socks_temp.get(socket_temp) == zmq.POLLIN:
         message_temp = socket_temp.recv()
-    socks_sig = dict(poller_sig.poll())
+    socks_sig = dict(poller_sig.poll(0))
     if socks_sig.get(socket_sig) == zmq.POLLIN:
         message_sig = socket_sig.recv()
     T = numpy.frombuffer(message_temp, dtype=numpy.float32())
