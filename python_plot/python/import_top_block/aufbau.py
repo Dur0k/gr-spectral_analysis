@@ -13,6 +13,7 @@ from gnuradio import blocks
 from gnuradio import gr
 from gnuradio.filter import firdes
 import sys
+import numpy
 import signal
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
@@ -33,14 +34,15 @@ class top_block(gr.top_block):
         ##################################################
         self.sensor_count = sensor_count = 16
         self.samp_rate = samp_rate = 1e6
-        self.fft_size = fft_size = 1024*1
-        self.polycoeff = polycoeff = [[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[3.75334018e-02, -2.24642587, -3.69621493e+01, 1.20001284e+08], [3.75334018e-02, -2.24642587, -3.69621493e+01, 1.20001284e+08], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0]]
+        self.fft_size = fft_size = 1024*2
+        self.harmonic = harmonic = 5
+        self.polycoeff = polycoeff = numpy.array(([[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[3.75334018e-02, -2.24642587, -3.69621493e+01, 1.20001284e+08], [3.75334018e-02, -2.24642587, -3.69621493e+01, 1.20001284e+08], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0]]))/(5/harmonic)
         self.fshift = fshift = 24e6 * 5
         self.offset = offset = [235.0, -300, 326.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.thres = thres = 0.03
         self.min_dist = min_dist = 1
         ## NEW
-        self.harmonic = harmonic = 5
+
         self.decimation = decimation = 500//harmonic
         self.lo_freq = lo_freq = harmonic*24000000-250000
         self.bpfc = bpfc = firdes.low_pass(1,samp_rate,2*samp_rate/decimation/10,500)
@@ -130,6 +132,7 @@ class top_block(gr.top_block):
         self.samp_rate = samp_rate
         self.set_bpfc(firdes.low_pass(1,self.samp_rate,2*self.samp_rate/self.decimation/10,500))
         self.uhd_usrp_source_0_0.set_samp_rate(self.samp_rate)
+        self.spectral_analysis_periodogram_py_cc_0.set_samp_rate(self.samp_rate)
 
     def get_thres(self):
         return self.thres
