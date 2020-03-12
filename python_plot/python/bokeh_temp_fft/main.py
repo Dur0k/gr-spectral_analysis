@@ -26,7 +26,7 @@ per_window = "boxcar"
 fshift = str(0.0)
 
 # bokeh variable
-p_update = 60#80
+p_update = 10#80
 title_font_size = "25px"
 label_font_size = "20px"
 legend_font_size = "15px"
@@ -78,22 +78,17 @@ poller_sig.register(socket_sig, zmq.POLLIN)
 # bokeh stuff
 
 ## Input controls
-#freq_slider = Slider(title="Frequency of sines", value=-3000, start=-3000, end=3000, step=100, callback_policy='mouseup')
-freq_input = TextInput(title="Frequency of sines", value=str(-3000))
 sensor_count_input = TextInput(title="Sensor Count", value=str(16))
-poly_coeff_input = TextInput(title="Polynomial Coefficients", value=str([[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08], [2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]))
+polycoeff_input = TextInput(title="Polynomial Coefficients (of 5th harmonic)", value=str([[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08], [2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]))
 offset_input = TextInput(title="Offset", value=str([[130.0, 200.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]))
-fshift_input = TextInput(title="Frequency Shift", value="24e6 * 5")
+fshift_input = TextInput(title="Frequency Shift", value="(24e6 * 5) + 0.0")
 fft_size_input = TextInput(title="FFT Size", value=str(1024))
 samp_rate_input = TextInput(title="Sampling Rate", value=str(10000))
 thres_input = TextInput(title="Peak Threshold", value=str(0.03))
 min_dist_input = TextInput(title="Min Peak Distance", value=str(1))
 
-harmonic_input = Select(value=str(5), title='Harmonic', options=['1', '2','3','4','5','6','7'])
+harmonic_input = Select(value=str(5), title="Harmonic", options=['1', '2','3','4','5','6','7'])
 
-decimation_input = TextInput(title="Filter Decimation", value=str("500//harmonic)"))
-lo_freq_input = TextInput(title="LO Frequency", value=str("harmonic*24000000-250000"))
-bpfc_input = TextInput(title="Filter Function", value=str("firdes.low_pass(1,samp_rate,2*samp_rate/decimation/10,500)"))
 
 
 
@@ -198,7 +193,7 @@ def update(t):
             source_fft.data = source_fft.data
         else:
             f, Pxx = _calc_spectrum(signal[0:2048], fA)
-            f = f - numpy.asarray(float(eval(fshift)))
+            f = f - numpy.asarray(float(eval(fshift_input.value))) + 24e6*5
             new_fft_data = dict(
                 freq=f,
                 sp=Pxx,
@@ -206,21 +201,23 @@ def update(t):
             source_fft.data = new_fft_data
 
 def update_variables():
-    global fshift
+    #global fshift
     print("sending")
-    ii = [freq_input.value, sensor_count_input.value, poly_coeff_input.value, offset_input.value, fshift_input.value, fft_size_input.value, samp_rate_input.value, thres_input.value, min_dist_input.value]#
+    ii = [harmonic_input.value, polycoeff_input.value, offset_input.value, fshift_input.value, fft_size_input.value, samp_rate_input.value, thres_input.value, min_dist_input.value]
     socket_send.send_pyobj(ii)
-    fshift = fshift_input.value
+
     # wait for reply
     print("sent")
-
+    #fshift = fshift_input.value
+    
+    
 
 
 apply_button.on_click(update_variables)
-input_1 = column(freq_input, sensor_count_input, fft_size_input)#
-input_2 = column(poly_coeff_input, offset_input, fshift_input)
+input_1 = column(sensor_count_input, fft_size_input)#
+input_2 = column(polycoeff_input, offset_input, fshift_input)
 input_3 = column(samp_rate_input, thres_input, min_dist_input,apply_button)
-input_4 = column(harmonic_input, decimation_input, lo_freq_input, bpfc_input)
+input_4 = column(harmonic_input)
 input_g = layout([[p0, p1]], sizing_mode='stretch_width')
 #input_c = layout([[None, freq_input], [input_1, input_2, input_3]])
 input_c = gridplot([[p0, p1], [row(input_1, input_2, input_3, input_4), None]])
