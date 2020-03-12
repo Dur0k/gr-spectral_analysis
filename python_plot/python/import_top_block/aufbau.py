@@ -32,13 +32,11 @@ class top_block(gr.top_block):
         # Variables
         ##################################################
         self.sensor_count = sensor_count = 16
-        self.samp_rate = samp_rate = 1e6/100
-        self.plot = plot = 100
-        self.freq = freq = -2000
-        self.fft_size = fft_size = 1024*8
-        self.polycoeff = polycoeff = [[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+        self.samp_rate = samp_rate = 1e6
+        self.fft_size = fft_size = 1024*1
+        self.polycoeff = polycoeff = [[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[3.75334018e-02, -2.24642587, -3.69621493e+01, 1.20001284e+08], [3.75334018e-02, -2.24642587, -3.69621493e+01, 1.20001284e+08], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0]]
         self.fshift = fshift = 24e6 * 5
-        self.offset = offset = [130.0, 200.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.offset = offset = [235.0, -300, 326.0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.thres = thres = 0.03
         self.min_dist = min_dist = 1
         ## NEW
@@ -65,13 +63,14 @@ class top_block(gr.top_block):
         self.uhd_usrp_source_0_0.set_bandwidth(1000000, 0)
         self.uhd_usrp_source_0_0.set_samp_rate(self.samp_rate)
         # No synchronization enforced.
-        self.zeromq_push_sink_0_0_0 = zeromq.push_sink(gr.sizeof_gr_complex, self.fft_size, 'tcp://*:5589', 10, False, -1)
-        self.zeromq_push_sink_0_0 = zeromq.push_sink(gr.sizeof_float, self.sensor_count, 'tcp://*:5588', 10, False, -1)
-        self.spectral_analysis_temperature_calc_ff_0 = spectral_analysis.temperature_calc_ff(sensor_count, self.polycoeff, self.fshift, self.offset)
-        self.spectral_analysis_periodogram_py_cc_0 = spectral_analysis.periodogram_py_cc(samp_rate, self.fft_size, 'boxcar')
-        self.spectral_analysis_peak_finding_cf_0 = spectral_analysis.peak_finding_cf(self.fft_size, sensor_count, self.thres, self.min_dist)
+        self.zeromq_pub_sink_signal = zeromq.pub_sink(gr.sizeof_gr_complex, self.fft_size, 'tcp://*:5589', 10, False, -1)
+        self.zeromq_pub_sink_temp = zeromq.pub_sink(gr.sizeof_float, self.sensor_count, 'tcp://*:5588', 10, False, -1)
+
+        self.spectral_analysis_temperature_calc_ff_0 = spectral_analysis.temperature_calc_ff(self.sensor_count, self.polycoeff, self.fshift, self.offset)
+        self.spectral_analysis_periodogram_py_cc_0 = spectral_analysis.periodogram_py_cc(self.samp_rate/100, self.fft_size, 'boxcar')
+        self.spectral_analysis_peak_finding_cf_0 = spectral_analysis.peak_finding_cf(self.fft_size, self.sensor_count, self.thres, self.min_dist)
         self.blocks_stream_to_vector_0 = blocks.stream_to_vector(gr.sizeof_gr_complex*1, self.fft_size)
-        self.freq_xlating_fir_filter_xxx_0_0 = filter.freq_xlating_fir_filter_ccc(decimation, bpfc, 250000, samp_rate)
+        self.freq_xlating_fir_filter_xxx_0_0 = filter.freq_xlating_fir_filter_ccc(self.decimation, self.bpfc, 250000, self.samp_rate)
 
 
         ##################################################
@@ -79,23 +78,17 @@ class top_block(gr.top_block):
         ##################################################
         self.connect((self.uhd_usrp_source_0_0, 0), (self.freq_xlating_fir_filter_xxx_0_0, 0))
         self.connect((self.freq_xlating_fir_filter_xxx_0_0, 0), (self.blocks_stream_to_vector_0, 0))
-        self.connect((self.blocks_stream_to_vector_0, 0), (self.zeromq_push_sink_0_0_0, 0))
+        self.connect((self.blocks_stream_to_vector_0, 0), (self.zeromq_pub_sink_signal, 0))
         self.connect((self.blocks_stream_to_vector_0, 0), (self.spectral_analysis_periodogram_py_cc_0, 0))
         self.connect((self.spectral_analysis_peak_finding_cf_0, 0), (self.spectral_analysis_temperature_calc_ff_0, 0))
         self.connect((self.spectral_analysis_periodogram_py_cc_0, 0), (self.spectral_analysis_peak_finding_cf_0, 0))
         self.connect((self.spectral_analysis_periodogram_py_cc_0, 1), (self.spectral_analysis_peak_finding_cf_0, 1))
-        self.connect((self.spectral_analysis_temperature_calc_ff_0, 0), (self.zeromq_push_sink_0_0, 0))
+        self.connect((self.spectral_analysis_temperature_calc_ff_0, 0), (self.zeromq_pub_sink_temp, 0))
 
 
     def get_sensor_count(self):
         #return self.sensor_count
         return self.spectral_analysis_temperature_calc_ff_0.get_sensor_count()
-
-    # not working
-    def set_sensor_count(self, sensor_count):
-        self.sensor_count = sensor_count
-        #self.spectral_analysis_temperature_calc_ff_0.set_polycoeff(self.polycoeff)
-        #self.spectral_analysis_peak_finding_cf_0.set_offset(self.offset)
 
     def get_polycoeff(self):
         return self.polycoeff
@@ -138,13 +131,6 @@ class top_block(gr.top_block):
         self.set_bpfc(firdes.low_pass(1,self.samp_rate,2*self.samp_rate/self.decimation/10,500))
         self.uhd_usrp_source_0_0.set_samp_rate(self.samp_rate)
 
-    def get_fshift(self):
-        return self.fshift
-
-    def set_fshift(self, fshift):
-        self.fshift = fshift
-        self.spectral_analysis_temperature_calc_ff_0.set_fshift(self.fshift)
-
     def get_thres(self):
         return self.thres
 
@@ -158,21 +144,6 @@ class top_block(gr.top_block):
     def set_min_dist(self, min_dist):
         self.min_dist = min_dist
         self.spectral_analysis_peak_finding_cf_0.set_min_dist(self.min_dist)
-
-    def get_plot(self):
-        return self.plot
-
-    def set_plot(self, plot):
-        self.plot = plot
-
-    def get_freq(self):
-        return self.freq
-
-    def set_freq(self, freq):
-        self.freq = freq
-        self.variable_qtgui_range_0.set_frequency(self.freq)
-        self.variable_qtgui_range_0_0.set_frequency(self.freq+300)
-        #self.variable_qtgui_range_1.set_frequency(self.freq-300)
 
     def get_fshift(self):
         return self.fshift

@@ -6,7 +6,7 @@ import threading
 from scipy import signal as sg
 from bokeh.driving import count
 from bokeh.plotting import figure, curdoc
-from bokeh.models import ColumnDataSource, RangeTool, Slider, Button
+from bokeh.models import ColumnDataSource, RangeTool, Slider, Button, Select
 from bokeh.layouts import gridplot, column, row, layout
 from bokeh.colors import groups
 from bokeh.models.widgets import RangeSlider, TextInput
@@ -19,13 +19,14 @@ port_send = 5555
 
 # gr variables
 fA = 1e6/100
-sensor_count = 2
+sensor_count = 3
 
 # periodogram variable
 per_window = "boxcar"
+fshift = str(0.0)
 
 # bokeh variable
-p_update = 80#80
+p_update = 60#80
 title_font_size = "25px"
 label_font_size = "20px"
 legend_font_size = "15px"
@@ -43,7 +44,7 @@ p0_plot_width = 1180#930
 p0_tools = "xpan,box_zoom,save,reset"
 
 ## Spectrum Plot
-p1_y_range = (10**-10, 1)
+p1_y_range = (10**-13, 1)
 p1_x_range = (-2500, 2500)
 p1_x_bounds = (-4000,4000)
 p1_plot_height = 950#800
@@ -55,12 +56,19 @@ p1_tools = "xpan,xbox_zoom,save,reset"
 
 # zmq stuff
 context = zmq.Context()
-socket_temp = context.socket(zmq.PULL)
+#--------
+socket_temp = context.socket(zmq.SUB)
+socket_temp.setsockopt_string(zmq.SUBSCRIBE,'')
+socket_temp.set_hwm(1)
 socket_temp.connect("tcp://localhost:"+str(port_temp))
-socket_sig = context.socket(zmq.PULL)
+#--------
+socket_sig = context.socket(zmq.SUB)
+socket_sig.setsockopt_string(zmq.SUBSCRIBE,'')
 socket_sig.connect("tcp://localhost:"+str(port_sig))
+#--------
 socket_send = context.socket(zmq.PUSH)
 socket_send.bind("tcp://*:"+str(port_send))
+#--------
 poller_temp = zmq.Poller()
 poller_sig = zmq.Poller()
 poller_temp.register(socket_temp, zmq.POLLIN)
@@ -80,10 +88,15 @@ fft_size_input = TextInput(title="FFT Size", value=str(1024))
 samp_rate_input = TextInput(title="Sampling Rate", value=str(10000))
 thres_input = TextInput(title="Peak Threshold", value=str(0.03))
 min_dist_input = TextInput(title="Min Peak Distance", value=str(1))
-harmonic_input = TextInput(title="Harmonic", value=str(5))
+
+harmonic_input = Select(value=str(5), title='Harmonic', options=['1', '2','3','4','5','6','7'])
+
 decimation_input = TextInput(title="Filter Decimation", value=str("500//harmonic)"))
 lo_freq_input = TextInput(title="LO Frequency", value=str("harmonic*24000000-250000"))
 bpfc_input = TextInput(title="Filter Function", value=str("firdes.low_pass(1,samp_rate,2*samp_rate/decimation/10,500)"))
+
+
+
 apply_button = Button(label="Apply Settings", button_type="success")
 
 ## Temperature Plot# y_range=(0, 40), tools="xpan,xwheel_zoom,xbox_zoom,reset",
@@ -133,17 +146,24 @@ p1.line(x='freq', y='sp', source=source_fft, line_width=2, line_color='black')
 
 
 # functions
-def _update_data():
-    socks_temp = dict(poller_temp.poll())
+def _update_temp():
+    socks_temp = dict(poller_temp.poll(0))
     if socks_temp.get(socket_temp) == zmq.POLLIN:
         message_temp = socket_temp.recv()
-    socks_sig = dict(poller_sig.poll())
+        T = numpy.frombuffer(message_temp, dtype=numpy.float32())
+        T = numpy.reshape(T, (len(T)//16, 16))
+        return T
+    else:
+        return -1
+
+def _update_signal():
+    socks_sig = dict(poller_sig.poll(0))
     if socks_sig.get(socket_sig) == zmq.POLLIN:
         message_sig = socket_sig.recv()
-    T = numpy.frombuffer(message_temp, dtype=numpy.float32())
-    T = numpy.reshape(T, (len(T)//sensor_count, sensor_count))
-    signal = numpy.frombuffer(message_sig, dtype=numpy.complex64())
-    return T, signal
+        signal = numpy.frombuffer(message_sig, dtype=numpy.complex64())
+        return signal
+    else:
+        return -1
 
 def _calc_spectrum(x, fA):
     f, Pxx = sg.periodogram(x, fA, window=per_window, nfft=len(x) ,return_onesided=False, scaling='spectrum')
@@ -162,31 +182,35 @@ def _replaceNaN(x):
 
 @count()
 def update(t):
-    T, signal = _update_data()
-    new_data = dict(
-        time=[t]
-    )
-    T = _replaceNaN(T)
-    for ii in range(0, sensor_count):
-        new_data.update({'temp_'+str(ii): [numpy.mean(T[0, ii])]})
-
-    if len(signal) < 512:
-        source_fft.data = source_fft.data
-    else:
-        f, Pxx = _calc_spectrum(signal[0:2048], fA)
-        print(len(Pxx))
-        new_fft_data = dict(
-            freq=f,
-            sp=Pxx,
-        )
-        source_fft.data = new_fft_data
-    source.stream(new_data, 2000)
-
+    T = _update_temp()
+    signal = _update_signal()
+    if isinstance(T,int) == False:
+        new_data = dict(time=[t])
+        T = _replaceNaN(T)
+        for ii in range(0, sensor_count):
+            if T[:,ii].any() != 0:
+                new_data.update({'temp_'+str(ii): [T[:, ii]]})
+            else:
+                new_data.update({'temp_'+str(ii): [numpy.mean(T[:, ii])]})
+        source.stream(new_data, 800)
+    if isinstance(signal,int) == False:
+        if len(signal) < 512:
+            source_fft.data = source_fft.data
+        else:
+            f, Pxx = _calc_spectrum(signal[0:2048], fA)
+            f = f - numpy.asarray(float(eval(fshift)))
+            new_fft_data = dict(
+                freq=f,
+                sp=Pxx,
+            )
+            source_fft.data = new_fft_data
 
 def update_variables():
+    global fshift
     print("sending")
     ii = [freq_input.value, sensor_count_input.value, poly_coeff_input.value, offset_input.value, fshift_input.value, fft_size_input.value, samp_rate_input.value, thres_input.value, min_dist_input.value]#
     socket_send.send_pyobj(ii)
+    fshift = fshift_input.value
     # wait for reply
     print("sent")
 
@@ -199,7 +223,7 @@ input_3 = column(samp_rate_input, thres_input, min_dist_input,apply_button)
 input_4 = column(harmonic_input, decimation_input, lo_freq_input, bpfc_input)
 input_g = layout([[p0, p1]], sizing_mode='stretch_width')
 #input_c = layout([[None, freq_input], [input_1, input_2, input_3]])
-input_c = gridplot([[p0, p1], [row(input_1, input_2, input_3), None]])
+input_c = gridplot([[p0, p1], [row(input_1, input_2, input_3, input_4), None]])
 curdoc().add_periodic_callback(update, p_update)
 curdoc().add_root(input_c)#
 curdoc().title = "test plot"
