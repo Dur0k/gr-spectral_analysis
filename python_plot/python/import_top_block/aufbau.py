@@ -33,8 +33,6 @@ class top_block(gr.top_block):
         ##################################################
         self.sensor_count = sensor_count = 16
         self.samp_rate = samp_rate = 1e6
-        self.plot = plot = 100
-        self.freq = freq = -2000
         self.fft_size = fft_size = 1024*1
         self.polycoeff = polycoeff = [[2.22769620e-02, -1.70367733e+00, -1.58914013e+01, 1.19999708e+08],[3.75334018e-02, -2.24642587, -3.69621493e+01, 1.20001284e+08], [3.75334018e-02, -2.24642587, -3.69621493e+01, 1.20001284e+08], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0]]
         self.fshift = fshift = 24e6 * 5
@@ -92,12 +90,6 @@ class top_block(gr.top_block):
         #return self.sensor_count
         return self.spectral_analysis_temperature_calc_ff_0.get_sensor_count()
 
-    # not working
-    def set_sensor_count(self, sensor_count):
-        self.sensor_count = sensor_count
-        #self.spectral_analysis_temperature_calc_ff_0.set_polycoeff(self.polycoeff)
-        #self.spectral_analysis_peak_finding_cf_0.set_offset(self.offset)
-
     def get_polycoeff(self):
         return self.polycoeff
 
@@ -139,13 +131,6 @@ class top_block(gr.top_block):
         self.set_bpfc(firdes.low_pass(1,self.samp_rate,2*self.samp_rate/self.decimation/10,500))
         self.uhd_usrp_source_0_0.set_samp_rate(self.samp_rate)
 
-    def get_fshift(self):
-        return self.fshift
-
-    def set_fshift(self, fshift):
-        self.fshift = fshift
-        self.spectral_analysis_temperature_calc_ff_0.set_fshift(self.fshift)
-
     def get_thres(self):
         return self.thres
 
@@ -159,18 +144,6 @@ class top_block(gr.top_block):
     def set_min_dist(self, min_dist):
         self.min_dist = min_dist
         self.spectral_analysis_peak_finding_cf_0.set_min_dist(self.min_dist)
-
-    def get_plot(self):
-        return self.plot
-
-    def set_plot(self, plot):
-        self.plot = plot
-
-    def get_freq(self):
-        return self.freq
-
-    def set_freq(self, freq):
-        self.freq = freq
 
     def get_fshift(self):
         return self.fshift
