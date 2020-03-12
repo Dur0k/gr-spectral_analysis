@@ -23,10 +23,9 @@ sensor_count = 3
 
 # periodogram variable
 per_window = "boxcar"
-fshift = str(0.0)
 
 # bokeh variable
-p_update = 10#80
+p_update = 60#80
 title_font_size = "25px"
 label_font_size = "20px"
 legend_font_size = "15px"
@@ -201,25 +200,20 @@ def update(t):
             source_fft.data = new_fft_data
 
 def update_variables():
-    #global fshift
     print("sending")
     ii = [harmonic_input.value, polycoeff_input.value, offset_input.value, fshift_input.value, fft_size_input.value, samp_rate_input.value, thres_input.value, min_dist_input.value]
     socket_send.send_pyobj(ii)
-
-    # wait for reply
     print("sent")
-    #fshift = fshift_input.value
     
     
 
 
 apply_button.on_click(update_variables)
-input_1 = column(sensor_count_input, fft_size_input)#
-input_2 = column(polycoeff_input, offset_input, fshift_input)
-input_3 = column(samp_rate_input, thres_input, min_dist_input,apply_button)
-input_4 = column(harmonic_input)
+input_1 = column(harmonic_input, sensor_count_input, fft_size_input)#
+input_2 = column(polycoeff_input, offset_input)
+input_3 = column(samp_rate_input, thres_input, min_dist_input)
+input_4 = column(fshift_input, apply_button)
 input_g = layout([[p0, p1]], sizing_mode='stretch_width')
-#input_c = layout([[None, freq_input], [input_1, input_2, input_3]])
 input_c = gridplot([[p0, p1], [row(input_1, input_2, input_3, input_4), None]])
 curdoc().add_periodic_callback(update, p_update)
 curdoc().add_root(input_c)#
