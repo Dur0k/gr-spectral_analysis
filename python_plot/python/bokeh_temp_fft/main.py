@@ -55,13 +55,19 @@ p1_tools = "xpan,xbox_zoom,save,reset"
 
 # zmq stuff
 context = zmq.Context()
-socket_temp = context.socket(zmq.PULL)
+#--------
+socket_temp = context.socket(zmq.SUB)
+socket_temp.setsockopt_string(zmq.SUBSCRIBE,'')
 socket_temp.set_hwm(1)
 socket_temp.connect("tcp://localhost:"+str(port_temp))
-socket_sig = context.socket(zmq.PULL)
+#--------
+socket_sig = context.socket(zmq.SUB)
+socket_sig.setsockopt_string(zmq.SUBSCRIBE,'')
 socket_sig.connect("tcp://localhost:"+str(port_sig))
+#--------
 socket_send = context.socket(zmq.PUSH)
 socket_send.bind("tcp://*:"+str(port_send))
+#--------
 poller_temp = zmq.Poller()
 poller_sig = zmq.Poller()
 poller_temp.register(socket_temp, zmq.POLLIN)
@@ -184,7 +190,7 @@ def update(t):
             sp=Pxx,
         )
         source_fft.data = new_fft_data
-    source.stream(new_data, 2000)
+    source.stream(new_data, 800)
 
 
 def update_variables():

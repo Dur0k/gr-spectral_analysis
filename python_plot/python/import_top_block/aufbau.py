@@ -65,8 +65,9 @@ class top_block(gr.top_block):
         self.uhd_usrp_source_0_0.set_bandwidth(1000000, 0)
         self.uhd_usrp_source_0_0.set_samp_rate(self.samp_rate)
         # No synchronization enforced.
-        self.zeromq_push_sink_0_0_0 = zeromq.push_sink(gr.sizeof_gr_complex, self.fft_size, 'tcp://*:5589', 10, False, -1)
-        self.zeromq_push_sink_0_0 = zeromq.push_sink(gr.sizeof_float, self.sensor_count, 'tcp://*:5588', 10, False, -1)
+        self.zeromq_pub_sink_signal = zeromq.pub_sink(gr.sizeof_gr_complex, self.fft_size, 'tcp://*:5589', 10, False, -1)
+        self.zeromq_pub_sink_temp = zeromq.pub_sink(gr.sizeof_float, self.sensor_count, 'tcp://*:5588', 10, False, -1)
+
         self.spectral_analysis_temperature_calc_ff_0 = spectral_analysis.temperature_calc_ff(self.sensor_count, self.polycoeff, self.fshift, self.offset)
         self.spectral_analysis_periodogram_py_cc_0 = spectral_analysis.periodogram_py_cc(self.samp_rate/100, self.fft_size, 'boxcar')
         self.spectral_analysis_peak_finding_cf_0 = spectral_analysis.peak_finding_cf(self.fft_size, self.sensor_count, self.thres, self.min_dist)
@@ -79,12 +80,12 @@ class top_block(gr.top_block):
         ##################################################
         self.connect((self.uhd_usrp_source_0_0, 0), (self.freq_xlating_fir_filter_xxx_0_0, 0))
         self.connect((self.freq_xlating_fir_filter_xxx_0_0, 0), (self.blocks_stream_to_vector_0, 0))
-        self.connect((self.blocks_stream_to_vector_0, 0), (self.zeromq_push_sink_0_0_0, 0))
+        self.connect((self.blocks_stream_to_vector_0, 0), (self.zeromq_pub_sink_signal, 0))
         self.connect((self.blocks_stream_to_vector_0, 0), (self.spectral_analysis_periodogram_py_cc_0, 0))
         self.connect((self.spectral_analysis_peak_finding_cf_0, 0), (self.spectral_analysis_temperature_calc_ff_0, 0))
         self.connect((self.spectral_analysis_periodogram_py_cc_0, 0), (self.spectral_analysis_peak_finding_cf_0, 0))
         self.connect((self.spectral_analysis_periodogram_py_cc_0, 1), (self.spectral_analysis_peak_finding_cf_0, 1))
-        self.connect((self.spectral_analysis_temperature_calc_ff_0, 0), (self.zeromq_push_sink_0_0, 0))
+        self.connect((self.spectral_analysis_temperature_calc_ff_0, 0), (self.zeromq_pub_sink_temp, 0))
 
 
     def get_sensor_count(self):
