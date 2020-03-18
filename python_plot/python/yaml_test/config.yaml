@@ -1,0 +1,42 @@
+zmq:
+    # Receive temperatures port
+    port_temp: 5588
+    # Receive signal port
+    port_sig: 5589
+    # Send gr settings port
+    port_send: 5555
+
+    
+bokeh:
+    Periodogram:
+        per_window: "boxcar"
+        fA: 1e6/100
+    sensor_count: 3
+    p_update: 60
+    title_font_size: "25px"
+    label_font_size: "20px"
+    legend_font_size: "15px"
+
+    Temperature_Plot:
+        sensor_name_list: (5,10,14)
+        p0_x_range_intervall: 500
+        p0_x_range_padding: 0
+        p0_title: "Sensor Temperature"
+        p0_ylabel: "Temperature [°C]"
+        p0_xlabel: "Time"
+        p0_y_range: (0,40)
+        p0_plot_height: 950
+        p0_plot_width: 1180#930
+        p0_tools: "xpan,box_zoom,save,reset"
+
+    Spectrum_Plot:
+        p1_y_range: (10**-13, 1)
+        p1_x_range: (-2500, 2500)
+        p1_x_bounds: (-4000,4000)
+        p1_plot_height: 950#800
+        p1_plot_width: 1180#930
+        p1_xlabel: "Frequency [Hz]"
+        p1_ylabel: "Spectrum"
+        p1_title: "Periodogram of baseband signal"
+        p1_tools: "xpan,xbox_zoom,save,reset"
+

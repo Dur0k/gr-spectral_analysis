@@ -17,21 +17,19 @@ port_temp = 5588
 port_sig = 5589
 port_send = 5555
 
-# gr variables
-fA = 1e6/100
-sensor_count = 3
-
 # periodogram variable
+fA = 1e6/100
 per_window = "boxcar"
 
 # bokeh variable
+sensor_count = 3
 p_update = 60#80
 title_font_size = "25px"
 label_font_size = "20px"
 legend_font_size = "15px"
 
 ## Temperature Plot
-sensor_list = (5,10,14)
+sensor_name_list = (5,10,14)
 p0_x_range_intervall = 500
 p0_x_range_padding = 0
 p0_title = "Sensor Temperature"
@@ -116,7 +114,7 @@ source = ColumnDataSource(data)
 linestyles = ['solid','dashed','dotted','dotdash','dashdot']
 
 for i in range(0, sensor_count):
-    p0.line(x='time', y='temp_'+str(i), source=source, line_width=2, line_color='black', line_dash=linestyles[i], legend_label="Sensor "+str(sensor_list[i]))#line_color=groups.black[8],
+    p0.line(x='time', y='temp_'+str(i), source=source, line_width=2, line_color='black', line_dash=linestyles[i], legend_label="Sensor "+str(sensor_name_list[i]))#line_color=groups.black[8],
 
 p0.legend.location = "bottom_left"
 p0.legend.click_policy = "hide"
